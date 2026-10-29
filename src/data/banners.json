@@ -1,0 +1,32 @@
+[
+  {
+    "id": "banner_hero_winter",
+    "titleAr": "تألقي بأرقى العبايات والفساتين المحتشمة",
+    "titleEn": "Discover Luxury Modest Fashion & Abayas",
+    "subtitleAr": "خصومات حصرية تبدأ من 25% على تشكيلة الموسم الجديدة بالكامل",
+    "subtitleEn": "Exclusive discounts starting from 25% on our new seasonal collection",
+    "badgeTextAr": "عرض الموسم",
+    "badgeTextEn": "Seasonal Offer",
+    "buttonTextAr": "تسوقي العبايات الآن",
+    "buttonTextEn": "Shop Abayas Now",
+    "imageUrl": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1600&q=80",
+    "targetCategorySlug": "abayas-and-kaftans",
+    "isActive": true,
+    "displayOrder": 1
+  },
+  {
+    "id": "banner_home_linen",
+    "titleAr": "جددي غرفتك بنعومة القطن المصري الفاخر",
+    "titleEn": "Transform Your Home with Egyptian Cotton",
+    "subtitleAr": "أطقم سرير ومفارش عرائس بخامات قطنية 100% ومقاسات تناسب جميع الأسرّة",
+    "subtitleEn": "100% Egyptian cotton bed sheets and luxury duvets",
+    "badgeTextAr": "الأكثر مبيعاً",
+    "badgeTextEn": "Best Seller",
+    "buttonTextAr": "تصفحي المفروشات",
+    "buttonTextEn": "Explore Bedding",
+    "imageUrl": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1600&q=80",
+    "targetCategorySlug": "bedding-and-sheets",
+    "isActive": true,
+    "displayOrder": 2
+  }
+]

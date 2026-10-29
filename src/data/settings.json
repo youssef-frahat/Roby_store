@@ -1,0 +1,17 @@
+{
+  "storeName": "روبي ستور - Roby Store",
+  "tagline": "أزياء حريمي ومفروشات راقية",
+  "whatsappNumber": "201000000000",
+  "whatsappMessageTemplate": "مرحباً، أود تأكيد هذا الطلب من متجركم.",
+  "instagramUrl": "https://instagram.com/roby_store",
+  "instagramHandle": "@roby_store",
+  "facebookUrl": "https://facebook.com/robystore.eg",
+  "messengerUrl": "https://m.me/robystore.eg",
+  "contactPhone": "01000000000",
+  "contactEmail": "contact@robystore.com",
+  "storeAddress": "القاهرة، جمهورية مصر العربية",
+  "currency": "ج.م",
+  "currencyEn": "EGP",
+  "freeShippingThreshold": 1500,
+  "enableSocialOrdering": true
+}

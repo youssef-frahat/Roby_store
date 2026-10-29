@@ -1,0 +1,346 @@
+[
+  {
+    "id": "prod_abaya_royal_crepe",
+    "slug": "royal-embroidered-crepe-abaya",
+    "titleAr": "عباية كريب رويال مطرزة يدوياً",
+    "titleEn": "Royal Hand-Embroidered Crepe Abaya",
+    "descriptionAr": "عباية خليجية أنيقة مصنوعة من أجود خامات كريب رويال الكوري الفاخر، تتميز بتطريز يدوي متقن على الأكمام والصدر، قصة واسعة مريحة وعملية تناسب المناسبات والزيارات الرسمية.",
+    "descriptionEn": "Elegant Gulf-style abaya made from premium Korean Royal Crepe fabric. Features intricate hand-embroidery on sleeves and chest with a comfortable modest cut.",
+    "basePrice": 1250,
+    "discountPrice": 950,
+    "currency": "EGP",
+    "images": [
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=800&q=80"
+    ],
+    "categoryIds": ["cat_womens_fashion", "cat_abayas"],
+    "primaryCategorySlug": "abayas-and-kaftans",
+    "tags": ["bestseller", "ramadan-collection", "featured", "abaya"],
+    "rating": 4.9,
+    "reviewCount": 38,
+    "isFeatured": true,
+    "isNewArrival": true,
+    "variants": [
+      {
+        "id": "var_aby_blk_m",
+        "sku": "ROBY-ABY-01-BLK-M",
+        "color": { "nameAr": "أسود ملكي", "nameEn": "Royal Black", "hex": "#111111" },
+        "size": "M",
+        "priceAdjustment": 0,
+        "stockQuantity": 6,
+        "inStock": true
+      },
+      {
+        "id": "var_aby_blk_l",
+        "sku": "ROBY-ABY-01-BLK-L",
+        "color": { "nameAr": "أسود ملكي", "nameEn": "Royal Black", "hex": "#111111" },
+        "size": "L",
+        "priceAdjustment": 0,
+        "stockQuantity": 4,
+        "inStock": true
+      },
+      {
+        "id": "var_aby_blk_xl",
+        "sku": "ROBY-ABY-01-BLK-XL",
+        "color": { "nameAr": "أسود ملكي", "nameEn": "Royal Black", "hex": "#111111" },
+        "size": "XL",
+        "priceAdjustment": 50,
+        "stockQuantity": 2,
+        "inStock": true
+      },
+      {
+        "id": "var_aby_emr_m",
+        "sku": "ROBY-ABY-01-EMR-M",
+        "color": { "nameAr": "أخضر زمردي", "nameEn": "Emerald Green", "hex": "#046307" },
+        "size": "M",
+        "priceAdjustment": 0,
+        "stockQuantity": 3,
+        "inStock": true
+      },
+      {
+        "id": "var_aby_emr_l",
+        "sku": "ROBY-ABY-01-EMR-L",
+        "color": { "nameAr": "أخضر زمردي", "nameEn": "Emerald Green", "hex": "#046307" },
+        "size": "L",
+        "priceAdjustment": 0,
+        "stockQuantity": 0,
+        "inStock": false
+      },
+      {
+        "id": "var_aby_nvy_l",
+        "sku": "ROBY-ABY-01-NVY-L",
+        "color": { "nameAr": "كحلي داكن", "nameEn": "Deep Navy", "hex": "#0F1E36" },
+        "size": "L",
+        "priceAdjustment": 0,
+        "stockQuantity": 5,
+        "inStock": true
+      }
+    ],
+    "availableColors": [
+      { "nameAr": "أسود ملكي", "nameEn": "Royal Black", "hex": "#111111" },
+      { "nameAr": "أخضر زمردي", "nameEn": "Emerald Green", "hex": "#046307" },
+      { "nameAr": "كحلي داكن", "nameEn": "Deep Navy", "hex": "#0F1E36" }
+    ],
+    "availableSizes": ["M", "L", "XL"],
+    "totalStock": 20,
+    "hasStock": true,
+    "createdAt": "2026-10-01T10:00:00Z",
+    "updatedAt": "2026-10-25T14:30:00Z"
+  },
+  {
+    "id": "prod_01",
+    "slug": "luxury-silk-abaya",
+    "titleAr": "عباية حرير فاخرة",
+    "titleEn": "Luxury Silk Abaya",
+    "descriptionAr": "عباية مصنوعة من الحرير الطبيعي الناعم بقصة ملكية واسعة وتطريز فاخر.",
+    "descriptionEn": "Abaya crafted from natural silk with elegant royal cut and delicate embroidery.",
+    "basePrice": 800,
+    "discountPrice": 650,
+    "currency": "EGP",
+    "images": [
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80"
+    ],
+    "categoryIds": ["cat_womens_fashion", "cat_abayas"],
+    "primaryCategorySlug": "abayas-and-kaftans",
+    "tags": ["luxury", "abaya", "featured"],
+    "rating": 4.9,
+    "reviewCount": 28,
+    "isFeatured": true,
+    "isNewArrival": true,
+    "variants": [
+      {
+        "id": "var_01",
+        "sku": "ROBY-ABY-BLK-M",
+        "color": { "nameAr": "أسود ملكي", "nameEn": "Royal Black", "hex": "#1A1A1A" },
+        "size": "M",
+        "priceAdjustment": 50,
+        "stockQuantity": 5,
+        "inStock": true
+      },
+      {
+        "id": "var_02",
+        "sku": "ROBY-ABY-ROS-L",
+        "color": { "nameAr": "وردي مغبر", "nameEn": "Dusty Rose", "hex": "#D4A5A5" },
+        "size": "L",
+        "priceAdjustment": 50,
+        "stockQuantity": 2,
+        "inStock": true
+      }
+    ],
+    "availableColors": [
+      { "nameAr": "أسود ملكي", "nameEn": "Royal Black", "hex": "#1A1A1A" },
+      { "nameAr": "وردي مغبر", "nameEn": "Dusty Rose", "hex": "#D4A5A5" }
+    ],
+    "availableSizes": ["M", "L"],
+    "totalStock": 7,
+    "hasStock": true,
+    "createdAt": "2026-10-28T00:00:00Z",
+    "updatedAt": "2026-10-28T00:00:00Z"
+  },
+  {
+    "id": "prod_bedsheet_egyptian_cotton",
+    "slug": "luxury-egyptian-cotton-bedsheet-set",
+    "titleAr": "طقم ملاية قطن مصري 100% تطريز فاخر (5 قطع)",
+    "titleEn": "Luxury 100% Egyptian Cotton Bed Sheet Set (5 Pcs)",
+    "descriptionAr": "طقم ملاية مصنوع من أجود خيوط القطن المصري طويل التيلة بعدد خيوط 400 غرزة لنعومة لا تضاهى وملمس حريري بارد في الصيف ودافيء في الشتاء. يشتمل على: ملاية أستيك + كيس لحاف + 2 كيس مخدة + 2 كيس خدادية.",
+    "descriptionEn": "400 thread-count 100% long-staple Egyptian cotton bedding set. Includes fitted sheet, duvet cover, 2 pillowcases, and 2 cushion covers.",
+    "basePrice": 850,
+    "discountPrice": 690,
+    "currency": "EGP",
+    "images": [
+      "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=800&q=80"
+    ],
+    "categoryIds": ["cat_home_textiles", "cat_bedding"],
+    "primaryCategorySlug": "bedding-and-sheets",
+    "tags": ["bestseller", "cotton-100", "home-luxury", "Cotton"],
+    "rating": 4.8,
+    "reviewCount": 52,
+    "isFeatured": true,
+    "isNewArrival": false,
+    "variants": [
+      {
+        "id": "var_shet_wht_sgl",
+        "sku": "ROBY-SHT-01-WHT-120",
+        "color": { "nameAr": "أبيض لؤلؤي", "nameEn": "Pearl White", "hex": "#FDFBF7" },
+        "size": "120x200cm (مفرد)",
+        "priceAdjustment": 0,
+        "stockQuantity": 10,
+        "inStock": true
+      },
+      {
+        "id": "var_shet_wht_qin",
+        "sku": "ROBY-SHT-01-WHT-160",
+        "color": { "nameAr": "أبيض لؤلؤي", "nameEn": "Pearl White", "hex": "#FDFBF7" },
+        "size": "160x200cm (كوين)",
+        "priceAdjustment": 80,
+        "stockQuantity": 8,
+        "inStock": true
+      },
+      {
+        "id": "var_shet_wht_kng",
+        "sku": "ROBY-SHT-01-WHT-180",
+        "color": { "nameAr": "أبيض لؤلؤي", "nameEn": "Pearl White", "hex": "#FDFBF7" },
+        "size": "180x200cm (كينج)",
+        "priceAdjustment": 150,
+        "stockQuantity": 5,
+        "inStock": true
+      },
+      {
+        "id": "var_shet_ros_qin",
+        "sku": "ROBY-SHT-01-ROS-160",
+        "color": { "nameAr": "وردي كشمير", "nameEn": "Cashmere Rose", "hex": "#DCAE96" },
+        "size": "160x200cm (كوين)",
+        "priceAdjustment": 80,
+        "stockQuantity": 6,
+        "inStock": true
+      },
+      {
+        "id": "var_shet_ros_kng",
+        "sku": "ROBY-SHT-01-ROS-180",
+        "color": { "nameAr": "وردي كشمير", "nameEn": "Cashmere Rose", "hex": "#DCAE96" },
+        "size": "180x200cm (كينج)",
+        "priceAdjustment": 150,
+        "stockQuantity": 0,
+        "inStock": false
+      },
+      {
+        "id": "var_shet_sag_kng",
+        "sku": "ROBY-SHT-01-SAG-180",
+        "color": { "nameAr": "أخضر ميرمية", "nameEn": "Sage Green", "hex": "#9CAF88" },
+        "size": "180x200cm (كينج)",
+        "priceAdjustment": 150,
+        "stockQuantity": 4,
+        "inStock": true
+      }
+    ],
+    "availableColors": [
+      { "nameAr": "أبيض لؤلؤي", "nameEn": "Pearl White", "hex": "#FDFBF7" },
+      { "nameAr": "وردي كشمير", "nameEn": "Cashmere Rose", "hex": "#DCAE96" },
+      { "nameAr": "أخضر ميرمية", "nameEn": "Sage Green", "hex": "#9CAF88" }
+    ],
+    "availableSizes": ["120x200cm (مفرد)", "160x200cm (كوين)", "180x200cm (كينج)"],
+    "totalStock": 33,
+    "hasStock": true,
+    "createdAt": "2026-10-05T12:00:00Z",
+    "updatedAt": "2026-10-26T16:00:00Z"
+  },
+  {
+    "id": "prod_dress_floral_chiffon",
+    "slug": "modest-floral-chiffon-dress",
+    "titleAr": "فستان شيفون طويل مشجر بأكمام واسعة",
+    "titleEn": "Modest Long Floral Chiffon Dress",
+    "descriptionAr": "فستان محتشم بقصة واسعة ومريح مبطن بالكامل بخامة ناعمة، يتميز بنقوشات زهور رقيقة وحزام خصر لضبط المقاس.",
+    "descriptionEn": "Modest flowy floral dress fully lined with soft breathable fabric. Features wide balloon sleeves and matching waist belt.",
+    "basePrice": 980,
+    "discountPrice": 750,
+    "currency": "EGP",
+    "images": [
+      "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=800&q=80"
+    ],
+    "categoryIds": ["cat_womens_fashion", "cat_dresses"],
+    "primaryCategorySlug": "modest-dresses",
+    "tags": ["summer-collection", "dresses", "bestseller"],
+    "rating": 4.7,
+    "reviewCount": 27,
+    "isFeatured": true,
+    "isNewArrival": true,
+    "variants": [
+      {
+        "id": "var_drs_blu_s",
+        "sku": "ROBY-DRS-02-BLU-S",
+        "color": { "nameAr": "أزرق سماوي", "nameEn": "Sky Blue", "hex": "#87CEEB" },
+        "size": "S",
+        "priceAdjustment": 0,
+        "stockQuantity": 5,
+        "inStock": true
+      },
+      {
+        "id": "var_drs_blu_m",
+        "sku": "ROBY-DRS-02-BLU-M",
+        "color": { "nameAr": "أزرق سماوي", "nameEn": "Sky Blue", "hex": "#87CEEB" },
+        "size": "M",
+        "priceAdjustment": 0,
+        "stockQuantity": 8,
+        "inStock": true
+      },
+      {
+        "id": "var_drs_blu_l",
+        "sku": "ROBY-DRS-02-BLU-L",
+        "color": { "nameAr": "أزرق سماوي", "nameEn": "Sky Blue", "hex": "#87CEEB" },
+        "size": "L",
+        "priceAdjustment": 0,
+        "stockQuantity": 3,
+        "inStock": true
+      },
+      {
+        "id": "var_drs_ros_m",
+        "sku": "ROBY-DRS-02-ROS-M",
+        "color": { "nameAr": "وردي باستيل", "nameEn": "Pastel Pink", "hex": "#FFD1DC" },
+        "size": "M",
+        "priceAdjustment": 0,
+        "stockQuantity": 4,
+        "inStock": true
+      }
+    ],
+    "availableColors": [
+      { "nameAr": "أزرق سماوي", "nameEn": "Sky Blue", "hex": "#87CEEB" },
+      { "nameAr": "وردي باستيل", "nameEn": "Pastel Pink", "hex": "#FFD1DC" }
+    ],
+    "availableSizes": ["S", "M", "L"],
+    "totalStock": 20,
+    "hasStock": true,
+    "createdAt": "2026-10-10T09:00:00Z",
+    "updatedAt": "2026-10-27T11:00:00Z"
+  },
+  {
+    "id": "prod_quilt_double_face",
+    "slug": "luxury-double-face-microfiber-quilt",
+    "titleAr": "لحاف فيبر وجهين مايكروفايبر حراري",
+    "titleEn": "Luxury Double-Faced Thermal Microfiber Quilt",
+    "descriptionAr": "لحاف شتوي دافي وخفيف الوزن بحشوة فيبر كوري معالج ضد البكتيريا وجهين بلونين مختلفين لتغيير ديكور الغرفة بسهولة.",
+    "descriptionEn": "Warm lightweight winter quilt with anti-bacterial Korean fiber filling. Double-faced dual-color design for easy room styling.",
+    "basePrice": 1400,
+    "currency": "EGP",
+    "images": [
+      "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=800&q=80"
+    ],
+    "categoryIds": ["cat_home_textiles", "cat_quilts"],
+    "primaryCategorySlug": "duvet-covers-and-quilts",
+    "tags": ["winter-essentials", "luxury-quilt"],
+    "rating": 4.9,
+    "reviewCount": 19,
+    "isFeatured": false,
+    "isNewArrival": true,
+    "variants": [
+      {
+        "id": "var_qlt_gry_kng",
+        "sku": "ROBY-QLT-03-GRY-240",
+        "color": { "nameAr": "رمادي / بيج", "nameEn": "Grey / Beige", "hex": "#808080" },
+        "size": "240x260cm (كينج كبير)",
+        "priceAdjustment": 0,
+        "stockQuantity": 7,
+        "inStock": true
+      },
+      {
+        "id": "var_qlt_bur_kng",
+        "sku": "ROBY-QLT-03-BUR-240",
+        "color": { "nameAr": "نبيتي / كشمير", "nameEn": "Burgundy / Rose", "hex": "#800020" },
+        "size": "240x260cm (كينج كبير)",
+        "priceAdjustment": 0,
+        "stockQuantity": 5,
+        "inStock": true
+      }
+    ],
+    "availableColors": [
+      { "nameAr": "رمادي / بيج", "nameEn": "Grey / Beige", "hex": "#808080" },
+      { "nameAr": "نبيتي / كشمير", "nameEn": "Burgundy / Rose", "hex": "#800020" }
+    ],
+    "availableSizes": ["240x260cm (كينج كبير)"],
+    "totalStock": 12,
+    "hasStock": true,
+    "createdAt": "2026-10-15T14:00:00Z",
+    "updatedAt": "2026-10-27T18:00:00Z"
+  }
+]

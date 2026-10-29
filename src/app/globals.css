@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FAF7F2;
+  --foreground: #2B2D42;
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  font-family: 'Inter', 'Tajawal', 'Cairo', system-ui, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* RTL-aware scrollbars and smooth selection */
+::selection {
+  background-color: #D4A5A5;
+  color: #2B2D42;
+}
