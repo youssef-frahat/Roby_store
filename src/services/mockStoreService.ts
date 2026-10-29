@@ -52,6 +52,16 @@ export class MockStoreService implements IStoreService {
     this.banners = JSON.parse(JSON.stringify(bannersData)) as PromotionalBanner[];
     this.governorates = JSON.parse(JSON.stringify(governoratesData)) as GovernorateInfo[];
     this.settings = JSON.parse(JSON.stringify(settingsData)) as StoreSettings;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const saved = localStorage.getItem('roby_store_settings');
+        if (saved) {
+          this.settings = { ...this.settings, ...JSON.parse(saved) };
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
   }
 
   // ==========================================
@@ -75,6 +85,16 @@ export class MockStoreService implements IStoreService {
     this.simulateEmpty = false;
     this.delayMs = 0;
     this.settings = JSON.parse(JSON.stringify(settingsData)) as StoreSettings;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const saved = localStorage.getItem('roby_store_settings');
+        if (saved) {
+          this.settings = { ...this.settings, ...JSON.parse(saved) };
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
   }
 
   private async applySimulation(): Promise<void> {
@@ -534,6 +554,13 @@ export class MockStoreService implements IStoreService {
       ...this.settings,
       ...input,
     };
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        localStorage.setItem('roby_store_settings', JSON.stringify(this.settings));
+      } catch (e) {
+        // ignore
+      }
+    }
     return JSON.parse(JSON.stringify(this.settings));
   }
 
