@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Filter, X, RotateCcw, Check } from 'lucide-react';
-import { CategoryTreeItem, ProductFilterParams, VariantColor } from '../../types/store';
+import { Filter, RotateCcw, Check, Sparkles } from 'lucide-react';
+import { CategoryTreeItem, ProductFilterParams } from '../../types/store';
 
 interface FilterSidebarProps {
   categoryTree: CategoryTreeItem[];
@@ -13,17 +13,12 @@ interface FilterSidebarProps {
   onCloseMobile?: () => void;
 }
 
-const AVAILABLE_COLORS: VariantColor[] = [
-  { nameAr: 'أسود', nameEn: 'Black', hex: '#111111' },
-  { nameAr: 'وردي', nameEn: 'Rose', hex: '#D4A5A5' },
-  { nameAr: 'أبيض / سكري', nameEn: 'Cream', hex: '#F7EDE2' },
-  { nameAr: 'بيج', nameEn: 'Beige', hex: '#E0D0B8' },
-  { nameAr: 'أخضر زمردي', nameEn: 'Emerald', hex: '#0F5132' },
-  { nameAr: 'كحلي', nameEn: 'Navy', hex: '#1B2A4A' },
-  { nameAr: 'نبيتي / كشمير', nameEn: 'Burgundy', hex: '#800020' },
+const QUICK_PRICE_TIERS = [
+  { label: 'الكل', min: undefined, max: undefined },
+  { label: 'أقل من 500 ج.م', min: undefined, max: 500 },
+  { label: '500 - 1000 ج.م', min: 500, max: 1000 },
+  { label: 'أكثر من 1000 ج.م', min: 1000, max: undefined },
 ];
-
-const AVAILABLE_SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL', 'Free Size', '160x200cm', '180x200cm', '200x220cm'];
 
 export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   categoryTree,
@@ -33,24 +28,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   isOpenMobile = false,
   onCloseMobile,
 }) => {
-  const selectedColors = filterParams.colors || [];
-  const selectedSizes = filterParams.sizes || [];
-
-  const handleToggleColor = (colorName: string) => {
-    const exists = selectedColors.includes(colorName);
-    const updated = exists
-      ? selectedColors.filter((c) => c !== colorName)
-      : [...selectedColors, colorName];
-    onFilterChange({ colors: updated, page: 1 });
-  };
-
-  const handleToggleSize = (size: string) => {
-    const exists = selectedSizes.includes(size);
-    const updated = exists
-      ? selectedSizes.filter((s) => s !== size)
-      : [...selectedSizes, size];
-    onFilterChange({ sizes: updated, page: 1 });
-  };
+  const currentCategorySlug = filterParams.categorySlug;
 
   const content = (
     <div className="space-y-6">
@@ -58,87 +36,143 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       <div className="flex items-center justify-between border-b border-rose-100 pb-3">
         <div className="flex items-center gap-2 text-charcoal-900 font-bold">
           <Filter className="w-4 h-4 text-rose-600" />
-          <span>تصفية المنتجات</span>
+          <span>تصفية الكتالوج</span>
         </div>
         <button
           type="button"
           onClick={onReset}
-          className="text-xs text-rose-600 hover:text-rose-800 font-semibold flex items-center gap-1"
+          className="text-xs text-rose-600 hover:text-rose-800 font-semibold flex items-center gap-1 transition-colors"
         >
           <RotateCcw className="w-3 h-3" />
           <span>إعادة ضبط</span>
         </button>
       </div>
 
-      {/* 1. Category Tree */}
+      {/* 1. Category Tree Navigation */}
       <div>
         <h4 className="text-xs font-bold text-charcoal-800 uppercase tracking-wider mb-2.5">
           الأقسام والتصنيفات
         </h4>
         <div className="space-y-1.5 text-xs">
+          {/* All categories button */}
           <button
             type="button"
             onClick={() => onFilterChange({ categorySlug: undefined, page: 1 })}
-            className={`w-full text-start px-2 py-1.5 rounded-lg transition-colors ${
-              !filterParams.categorySlug
-                ? 'bg-rose-100 text-rose-900 font-bold'
+            className={`w-full text-start px-3 py-2 rounded-xl transition-all flex items-center justify-between ${
+              !currentCategorySlug
+                ? 'bg-rose-700 text-white font-bold shadow-xs'
                 : 'text-charcoal-700 hover:bg-rose-50'
             }`}
           >
-            جميع الأقسام
+            <span>جميع المنتجات</span>
+            {!currentCategorySlug && <Check className="w-3.5 h-3.5 text-white" />}
           </button>
-          {categoryTree.map((cat) => (
-            <div key={cat.id} className="space-y-1">
-              <button
-                type="button"
-                onClick={() => onFilterChange({ categorySlug: cat.slug, page: 1 })}
-                className={`w-full text-start px-2 py-1.5 rounded-lg flex items-center justify-between transition-colors ${
-                  filterParams.categorySlug === cat.slug
-                    ? 'bg-rose-100 text-rose-900 font-bold'
-                    : 'text-charcoal-800 hover:bg-rose-50 font-medium'
-                }`}
-              >
-                <span>{cat.nameAr}</span>
-                {cat.productCount != null && (
-                  <span className="text-[10px] text-charcoal-400">({cat.productCount})</span>
-                )}
-              </button>
 
-              {/* Subcategories */}
-              {cat.children && cat.children.length > 0 && (
-                <div className="ps-3 border-s border-rose-200/60 ms-2 space-y-1">
-                  {cat.children.map((sub) => (
-                    <button
-                      key={sub.id}
-                      type="button"
-                      onClick={() => onFilterChange({ categorySlug: sub.slug, page: 1 })}
-                      className={`w-full text-start px-2 py-1 rounded-md text-[11px] flex items-center justify-between transition-colors ${
-                        filterParams.categorySlug === sub.slug
-                          ? 'bg-rose-100 text-rose-900 font-bold'
-                          : 'text-charcoal-600 hover:bg-rose-50'
+          {/* Root Categories & Subcategories */}
+          {categoryTree.map((cat) => {
+            const isRootActive = currentCategorySlug === cat.slug;
+            const hasActiveChild = cat.children?.some((sub) => sub.slug === currentCategorySlug);
+
+            return (
+              <div key={cat.id} className="space-y-1 pt-1">
+                <button
+                  type="button"
+                  onClick={() => onFilterChange({ categorySlug: cat.slug, page: 1 })}
+                  className={`w-full text-start px-3 py-2 rounded-xl flex items-center justify-between transition-all ${
+                    isRootActive
+                      ? 'bg-rose-700 text-white font-bold shadow-xs'
+                      : hasActiveChild
+                      ? 'bg-rose-100/70 text-rose-950 font-bold'
+                      : 'text-charcoal-800 hover:bg-rose-50 font-medium'
+                  }`}
+                >
+                  <span>{cat.nameAr}</span>
+                  {cat.productCount != null && (
+                    <span
+                      className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                        isRootActive
+                          ? 'bg-rose-900/60 text-white'
+                          : 'bg-rose-100 text-rose-800'
                       }`}
                     >
-                      <span>{sub.nameAr}</span>
-                      {sub.productCount != null && (
-                        <span className="text-[10px] text-charcoal-400">({sub.productCount})</span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+                      {cat.productCount}
+                    </span>
+                  )}
+                </button>
+
+                {/* Subcategories (Indent) */}
+                {cat.children && cat.children.length > 0 && (
+                  <div className="ps-3 border-s-2 border-rose-200/80 ms-3 space-y-1 pt-0.5">
+                    {cat.children.map((sub) => {
+                      const isSubActive = currentCategorySlug === sub.slug;
+                      return (
+                        <button
+                          key={sub.id}
+                          type="button"
+                          onClick={() => onFilterChange({ categorySlug: sub.slug, page: 1 })}
+                          className={`w-full text-start px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between transition-all ${
+                            isSubActive
+                              ? 'bg-rose-600 text-white font-bold shadow-2xs'
+                              : 'text-charcoal-600 hover:bg-rose-50 hover:text-charcoal-900'
+                          }`}
+                        >
+                          <span>{sub.nameAr}</span>
+                          {sub.productCount != null && (
+                            <span
+                              className={`text-[10px] ${
+                                isSubActive ? 'text-rose-100' : 'text-charcoal-400'
+                              }`}
+                            >
+                              ({sub.productCount})
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* 2. Price Range */}
+      {/* 2. Fast Price Filter Chips (UX Improved) */}
       <div className="border-t border-rose-100 pt-4">
         <h4 className="text-xs font-bold text-charcoal-800 uppercase tracking-wider mb-2.5">
-          نطاق السعر (ج.م)
+          السعر (ج.م)
         </h4>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {QUICK_PRICE_TIERS.map((tier, idx) => {
+            const isSelected =
+              filterParams.minPrice === tier.min && filterParams.maxPrice === tier.max;
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() =>
+                  onFilterChange({
+                    minPrice: tier.min,
+                    maxPrice: tier.max,
+                    page: 1,
+                  })
+                }
+                className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${
+                  isSelected
+                    ? 'bg-rose-600 text-white border-rose-600 shadow-2xs'
+                    : 'bg-white text-charcoal-700 border-rose-200 hover:bg-rose-50'
+                }`}
+              >
+                {tier.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Custom Min / Max Inputs */}
+        <div className="grid grid-cols-2 gap-2 pt-1">
           <div>
-            <label className="text-[10px] text-charcoal-500 block mb-1">من:</label>
+            <label className="text-[10px] text-charcoal-500 block mb-1">الحد الأدنى:</label>
             <input
               type="number"
               placeholder="0"
@@ -149,11 +183,11 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                   page: 1,
                 })
               }
-              className="w-full bg-rose-50/50 border border-rose-200 rounded-lg p-2 text-xs text-charcoal-900"
+              className="w-full bg-rose-50/40 border border-rose-200 rounded-lg p-2 text-xs text-charcoal-900 focus:bg-white"
             />
           </div>
           <div>
-            <label className="text-[10px] text-charcoal-500 block mb-1">إلى:</label>
+            <label className="text-[10px] text-charcoal-500 block mb-1">الحد الأقصى:</label>
             <input
               type="number"
               placeholder="5000"
@@ -164,73 +198,15 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                   page: 1,
                 })
               }
-              className="w-full bg-rose-50/50 border border-rose-200 rounded-lg p-2 text-xs text-charcoal-900"
+              className="w-full bg-rose-50/40 border border-rose-200 rounded-lg p-2 text-xs text-charcoal-900 focus:bg-white"
             />
           </div>
         </div>
       </div>
 
-      {/* 3. Available Colors */}
+      {/* 3. In-Stock Only Toggle */}
       <div className="border-t border-rose-100 pt-4">
-        <h4 className="text-xs font-bold text-charcoal-800 uppercase tracking-wider mb-2.5">
-          الألوان
-        </h4>
-        <div className="flex flex-wrap gap-2">
-          {AVAILABLE_COLORS.map((c) => {
-            const isSelected = selectedColors.includes(c.nameAr);
-            return (
-              <button
-                key={c.nameEn}
-                type="button"
-                onClick={() => handleToggleColor(c.nameAr)}
-                title={c.nameAr}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] border transition-all ${
-                  isSelected
-                    ? 'border-rose-600 bg-rose-50 text-rose-900 font-bold ring-1 ring-rose-400'
-                    : 'border-rose-200 bg-white text-charcoal-700 hover:bg-rose-50'
-                }`}
-              >
-                <span
-                  className="w-3 h-3 rounded-full border border-gray-300 shadow-2xs"
-                  style={{ backgroundColor: c.hex }}
-                />
-                <span>{c.nameAr}</span>
-                {isSelected && <Check className="w-3 h-3 text-rose-600" />}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 4. Sizes */}
-      <div className="border-t border-rose-100 pt-4">
-        <h4 className="text-xs font-bold text-charcoal-800 uppercase tracking-wider mb-2.5">
-          المقاسات
-        </h4>
-        <div className="flex flex-wrap gap-1.5">
-          {AVAILABLE_SIZES.map((size) => {
-            const isSelected = selectedSizes.includes(size);
-            return (
-              <button
-                key={size}
-                type="button"
-                onClick={() => handleToggleSize(size)}
-                className={`px-3 py-1 rounded-lg text-xs font-medium border transition-all ${
-                  isSelected
-                    ? 'bg-rose-600 text-white border-rose-600 shadow-xs'
-                    : 'bg-white text-charcoal-700 border-rose-200 hover:bg-rose-50'
-                }`}
-              >
-                {size}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 5. In-Stock Only */}
-      <div className="border-t border-rose-100 pt-4">
-        <label className="flex items-center gap-2 cursor-pointer select-none">
+        <label className="flex items-center gap-2.5 cursor-pointer select-none">
           <input
             type="checkbox"
             checked={!!filterParams.inStockOnly}
@@ -238,7 +214,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
             className="w-4 h-4 rounded-sm text-rose-600 border-rose-300 focus:ring-rose-500"
           />
           <span className="text-xs font-semibold text-charcoal-800">
-            عرض المنتجات المتوفرة فقط بالمخزون
+            عرض الموديلات المتوفرة فقط في المخزون
           </span>
         </label>
       </div>
@@ -255,22 +231,20 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       {/* Mobile Drawer */}
       {isOpenMobile && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
-          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-charcoal-900/60 backdrop-blur-xs transition-opacity"
             onClick={onCloseMobile}
           />
-          {/* Drawer Panel */}
           <div className="relative ms-auto w-full max-w-xs bg-white h-full shadow-2xl p-6 overflow-y-auto z-10 flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-bold text-charcoal-900">الفلاتر</span>
+              <div className="flex items-center justify-between mb-4 border-b border-rose-100 pb-3">
+                <span className="font-bold text-charcoal-900 text-sm">تصفية المنتجات</span>
                 <button
                   type="button"
                   onClick={onCloseMobile}
                   className="p-1.5 text-charcoal-500 hover:text-charcoal-900"
                 >
-                  <X className="w-5 h-5" />
+                  ✕
                 </button>
               </div>
               {content}
@@ -281,7 +255,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 onClick={onCloseMobile}
                 className="w-full py-2.5 rounded-xl bg-rose-600 text-white text-xs font-bold shadow-md hover:bg-rose-700"
               >
-                عرض النتائج
+                تطبيق الفلاتر وعرض النتائج
               </button>
             </div>
           </div>

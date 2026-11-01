@@ -104,14 +104,14 @@ export const Header: React.FC<HeaderProps> = ({
           <Link href="/catalog" className="hover:text-rose-700 transition-colors">
             كل الكتالوج
           </Link>
+          <Link href="/catalog?category=abayas-and-kaftans" className="hover:text-rose-700 transition-colors">
+            العبايات
+          </Link>
           <Link href="/catalog?category=womens-fashion" className="hover:text-rose-700 transition-colors">
             الملابس الحريمي
           </Link>
           <Link href="/catalog?category=home-textiles" className="hover:text-rose-700 transition-colors">
             المفروشات المنزلية
-          </Link>
-          <Link href="/admin/settings" className="text-xs text-rose-500 hover:text-rose-800 border border-rose-200 rounded-md px-2 py-1">
-            لوحة الإدارة
           </Link>
         </nav>
 
@@ -165,6 +165,13 @@ export const Header: React.FC<HeaderProps> = ({
               جميع المنتجات
             </Link>
             <Link
+              href="/catalog?category=abayas-and-kaftans"
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 hover:bg-rose-50 rounded-md text-rose-700 font-semibold"
+            >
+              العبايات والقفاطين
+            </Link>
+            <Link
               href="/catalog?category=womens-fashion"
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 hover:bg-rose-50 rounded-md"
@@ -177,13 +184,6 @@ export const Header: React.FC<HeaderProps> = ({
               className="p-2 hover:bg-rose-50 rounded-md"
             >
               المفروشات والمنسوجات
-            </Link>
-            <Link
-              href="/admin/settings"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 text-rose-600 hover:bg-rose-50 rounded-md font-bold"
-            >
-              ⚙️ لوحة تحكم المتجر (Admin)
             </Link>
           </div>
         </div>

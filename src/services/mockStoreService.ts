@@ -72,8 +72,12 @@ export class MockStoreService implements IStoreService {
     this.delayMs = Math.max(0, ms);
   }
 
-  public setSimulatedError(error: '500' | 'network' | null): void {
-    this.simulatedError = error;
+  public setSimulatedError(error: '500' | 'network' | 'none' | null): void {
+    if (error === 'none') {
+      this.simulatedError = null;
+    } else {
+      this.simulatedError = error;
+    }
   }
 
   public setSimulateEmpty(empty: boolean): void {
@@ -198,16 +202,30 @@ export class MockStoreService implements IStoreService {
 
       // 2. Category Filter (resolves selected category and all its descendants)
       if (params.categorySlug) {
-        const targetCategory = this.categories.find((c) => c.slug === params.categorySlug);
+        const querySlug = params.categorySlug.toLowerCase().trim();
+        const targetCategory = this.categories.find(
+          (c) =>
+            c.slug.toLowerCase() === querySlug ||
+            c.id.toLowerCase() === querySlug ||
+            (querySlug.includes('abaya') && c.slug.includes('abaya')) ||
+            (querySlug.includes('dress') && c.slug.includes('dress')) ||
+            (querySlug.includes('bed') && c.slug.includes('bed'))
+        );
         if (targetCategory) {
           const descendantIds = this.getDescendantCategoryIds(targetCategory.id);
           const allTargetIds = [targetCategory.id, ...descendantIds];
-          filtered = filtered.filter((p) =>
-            p.categoryIds.some((cid) => allTargetIds.includes(cid)) ||
-            p.primaryCategorySlug === params.categorySlug
+          filtered = filtered.filter(
+            (p) =>
+              p.categoryIds.some((cid) => allTargetIds.includes(cid)) ||
+              p.primaryCategorySlug === targetCategory.slug ||
+              p.primaryCategorySlug === querySlug
           );
         } else {
-          filtered = [];
+          filtered = filtered.filter(
+            (p) =>
+              p.primaryCategorySlug.toLowerCase() === querySlug ||
+              p.categoryIds.some((cid) => cid.toLowerCase().includes(querySlug))
+          );
         }
       } else if (params.categoryIds && params.categoryIds.length > 0) {
         filtered = filtered.filter((p) =>

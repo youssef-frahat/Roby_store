@@ -6,7 +6,6 @@ import { ArrowLeft, Sparkles, ShieldCheck, Truck, MessageCircle } from 'lucide-r
 import { getStoreService } from '../services/storeService';
 import { Category, Product, PromotionalBanner } from '../types/store';
 import { HeroBanner } from '../components/catalog/HeroBanner';
-import { CategoryNav } from '../components/catalog/CategoryNav';
 import { ProductCard } from '../components/catalog/ProductCard';
 import { ProductCardSkeleton } from '../components/common/Skeleton';
 import { ErrorCard } from '../components/common/ErrorCard';
@@ -14,212 +13,222 @@ import { ErrorCard } from '../components/common/ErrorCard';
 export default function HomePage() {
   const [banners, setBanners] = useState<PromotionalBanner[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [newArrivals, setNewArrivals] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<string>('all');
+  const [displayProducts, setDisplayProducts] = useState<Product[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [isLoadingInitial, setIsLoadingInitial] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const service = getStoreService();
 
-  const loadData = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const [bannersData, categoriesData, featured, arrivals] = await Promise.all([
-        service.getPromotionalBanners(),
-        service.getCategories(),
-        service.getFeaturedProducts(8),
-        service.getNewArrivals(8),
-      ]);
-      setBanners(bannersData);
-      setCategories(categoriesData);
-      setFeaturedProducts(featured);
-      setNewArrivals(arrivals);
-    } catch (err: any) {
-      setError(err.message || 'حدث خطأ أثناء تحميل محتويات الصفحة الرئيسية');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Load initial banners and categories
   useEffect(() => {
-    loadData();
-  }, []);
+    async function loadMeta() {
+      try {
+        const [bannersData, categoriesData] = await Promise.all([
+          service.getPromotionalBanners(),
+          service.getCategories(),
+        ]);
+        setBanners(bannersData);
+        setCategories(categoriesData);
+      } catch (err: any) {
+        setError(err.message || 'حدث خطأ أثناء تحميل البيانات');
+      } finally {
+        setIsLoadingInitial(false);
+      }
+    }
+    loadMeta();
+  }, [service]);
+
+  // Load products based on active category tab
+  useEffect(() => {
+    async function loadCategoryProducts() {
+      setIsLoadingProducts(true);
+      try {
+        const params = activeTab === 'all' ? { pageSize: 12 } : { categorySlug: activeTab, pageSize: 12 };
+        const res = await service.getProducts(params);
+        setDisplayProducts(res.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoadingProducts(false);
+      }
+    }
+    loadCategoryProducts();
+  }, [activeTab, service]);
+
+  const primaryCategories = categories.filter((c) => c.level === 0 || !c.parentId);
 
   return (
-    <div className="container mx-auto px-4 py-6 space-y-12">
+    <div className="container mx-auto px-4 py-4 space-y-10">
       {/* 1. Hero Promotional Banner Carousel */}
-      {isLoading ? (
-        <div className="w-full h-72 sm:h-96 rounded-3xl bg-rose-100/60 animate-pulse my-4" />
+      {isLoadingInitial ? (
+        <div className="w-full h-64 sm:h-80 md:h-96 rounded-3xl bg-rose-100/60 animate-pulse my-2" />
       ) : error ? (
-        <ErrorCard title="خطأ في تحميل العروض الترويجية" message={error} onRetry={loadData} />
+        <ErrorCard title="خطأ في تحميل العروض" message={error} onRetry={() => window.location.reload()} />
       ) : (
         <HeroBanner banners={banners} />
       )}
 
-      {/* 2. Value Props / Social Commerce Features */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4">
-        <div className="bg-white rounded-2xl p-4 border border-rose-100/80 shadow-2xs flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-            <MessageCircle className="w-5 h-5" />
+      {/* 2. Value Props Bar (Clean & Compact) */}
+      <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-1 text-charcoal-800">
+        <div className="bg-white rounded-2xl p-3 border border-rose-100 flex items-center gap-2.5 shadow-2xs">
+          <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+            <MessageCircle className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-charcoal-900">طلب فوري بالواتساب</h4>
-            <p className="text-[11px] text-charcoal-500">بدون بطاقات بنكية معقدة</p>
+            <h4 className="text-xs font-bold">طلب بالواتساب</h4>
+            <p className="text-[10px] text-charcoal-400">بنقرة واحدة بدون بطاقات</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-4 border border-rose-100/80 shadow-2xs flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
-            <Truck className="w-5 h-5" />
+        <div className="bg-white rounded-2xl p-3 border border-rose-100 flex items-center gap-2.5 shadow-2xs">
+          <div className="w-8 h-8 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
+            <Truck className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-charcoal-900">شحن لـ 27 محافظة</h4>
-            <p className="text-[11px] text-charcoal-500">توصيل سريع لباب بيتك</p>
+            <h4 className="text-xs font-bold">شحن لـ 27 محافظة</h4>
+            <p className="text-[10px] text-charcoal-400">توصيل لباب بيتك</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-4 border border-rose-100/80 shadow-2xs flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-5 h-5" />
+        <div className="bg-white rounded-2xl p-3 border border-rose-100 flex items-center gap-2.5 shadow-2xs">
+          <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+            <ShieldCheck className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-charcoal-900">معاينة قبل الاستلام</h4>
-            <p className="text-[11px] text-charcoal-500">حق الفحص والدفع كاش</p>
+            <h4 className="text-xs font-bold">معاينة عند الاستلام</h4>
+            <p className="text-[10px] text-charcoal-400">فحص قبل الدفع كاش</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-4 border border-rose-100/80 shadow-2xs flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
-            <Sparkles className="w-5 h-5" />
+        <div className="bg-white rounded-2xl p-3 border border-rose-100 flex items-center gap-2.5 shadow-2xs">
+          <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+            <Sparkles className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-charcoal-900">خامات فاخرة ومضمونة</h4>
-            <p className="text-[11px] text-charcoal-500">أقطان طبيعية وحرير راقٍ</p>
+            <h4 className="text-xs font-bold">خامات مضمونة</h4>
+            <p className="text-[10px] text-charcoal-400">أقطان وحرير فاخر</p>
           </div>
         </div>
       </section>
 
-      {/* 3. Category Quick Navigator */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
+      {/* 3. Direct Shopping Section: Category Tabs & Live Product Grid */}
+      <section className="space-y-6 pt-2">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-rose-100 pb-4">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold font-serif text-charcoal-900">
-              تسوقي حسب القسم
+              تسوقي مباشرة من الكتالوج
             </h2>
-            <p className="text-xs text-charcoal-500 mt-0.5">
-              اختاري من بين أرقى تصاميم الأزياء الحريمية والمفروشات المنزلية
+            <p className="text-xs text-charcoal-500 mt-1">
+              اختاري الموديل والمقاس واطلبي مباشرة عبر الواتساب
             </p>
           </div>
+
           <Link
             href="/catalog"
-            className="text-xs font-bold text-rose-700 hover:text-rose-900 flex items-center gap-1"
+            className="text-xs font-bold text-rose-700 hover:text-rose-900 flex items-center gap-1 shrink-0"
           >
-            <span>عرض الكتالوج</span>
+            <span>فتح الكتالوج الكامل والفلترة</span>
             <ArrowLeft className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        <CategoryNav
-          categories={categories}
-          onSelectCategory={(slug) => {
-            if (slug) {
-              window.location.href = `/catalog?category=${slug}`;
-            } else {
-              window.location.href = '/catalog';
-            }
-          }}
-        />
-      </section>
-
-      {/* 4. Featured Products (المنتجات المميزة) */}
-      <section className="space-y-6">
-        <div className="flex items-center justify-between border-b border-rose-100 pb-3">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs text-rose-600 font-bold mb-1">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>مختارات روبي الحصرية</span>
-            </div>
-            <h2 className="text-xl sm:text-2xl font-bold font-serif text-charcoal-900">
-              المنتجات الأكثر طلباً ومميزة
-            </h2>
-          </div>
-          <Link
-            href="/catalog?sortBy=featured"
-            className="text-xs font-bold text-rose-700 hover:text-rose-900 flex items-center gap-1"
+        {/* Live Category Filter Tabs on Homepage */}
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-2">
+          <button
+            type="button"
+            onClick={() => setActiveTab('all')}
+            className={`px-4 py-2 rounded-full text-xs font-bold transition-all shadow-2xs shrink-0 ${
+              activeTab === 'all'
+                ? 'bg-rose-700 text-white shadow-rose-200'
+                : 'bg-white text-charcoal-700 border border-rose-200 hover:bg-rose-50'
+            }`}
           >
-            <span>مشاهدة الكل</span>
-            <ArrowLeft className="w-3.5 h-3.5" />
-          </Link>
+            جميع الموديلات
+          </button>
+
+          {primaryCategories.map((cat) => {
+            const isActive = activeTab === cat.slug;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setActiveTab(cat.slug)}
+                className={`px-4 py-2 rounded-full text-xs font-bold transition-all shadow-2xs shrink-0 flex items-center gap-1.5 ${
+                  isActive
+                    ? 'bg-rose-700 text-white shadow-rose-200'
+                    : 'bg-white text-charcoal-700 border border-rose-200 hover:bg-rose-50'
+                }`}
+              >
+                <span>{cat.nameAr}</span>
+                {cat.productCount != null && (
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                      isActive ? 'bg-rose-900/60 text-white' : 'bg-rose-100 text-rose-800'
+                    }`}
+                  >
+                    {cat.productCount}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+
+          {/* Direct Subcategory shortcuts */}
+          <button
+            type="button"
+            onClick={() => setActiveTab('abayas-and-kaftans')}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all shadow-2xs shrink-0 ${
+              activeTab === 'abayas-and-kaftans'
+                ? 'bg-rose-600 text-white'
+                : 'bg-white text-charcoal-600 border border-rose-100 hover:bg-rose-50'
+            }`}
+          >
+            عبايات وقفاطين
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('bedding-and-sheets')}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all shadow-2xs shrink-0 ${
+              activeTab === 'bedding-and-sheets'
+                ? 'bg-rose-600 text-white'
+                : 'bg-white text-charcoal-600 border border-rose-100 hover:bg-rose-50'
+            }`}
+          >
+            ملايات وأطقم سرير
+          </button>
         </div>
 
-        {isLoading ? (
+        {/* Live Product Grid */}
+        {isLoadingProducts ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {Array.from({ length: 4 }).map((_, idx) => (
+            {Array.from({ length: 8 }).map((_, idx) => (
               <ProductCardSkeleton key={idx} />
             ))}
           </div>
+        ) : displayProducts.length === 0 ? (
+          <div className="py-12 text-center text-xs text-charcoal-500 bg-white rounded-2xl border border-rose-100">
+            لا توجد منتجات متوفرة في هذا القسم حالياً.
+          </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {featuredProducts.map((product) => (
+            {displayProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}
       </section>
 
-      {/* 5. New Arrivals (وصل حديثاً) */}
-      <section className="space-y-6 pt-4">
-        <div className="flex items-center justify-between border-b border-rose-100 pb-3">
-          <div>
-            <span className="text-xs text-rose-600 font-bold block mb-1">كولكشن جديد</span>
-            <h2 className="text-xl sm:text-2xl font-bold font-serif text-charcoal-900">
-              وصل حديثاً إلى روبي ستور
-            </h2>
-          </div>
-          <Link
-            href="/catalog?sortBy=newest"
-            className="text-xs font-bold text-rose-700 hover:text-rose-900 flex items-center gap-1"
-          >
-            <span>مشاهدة الكل</span>
-            <ArrowLeft className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        {isLoading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {Array.from({ length: 4 }).map((_, idx) => (
-              <ProductCardSkeleton key={idx} />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {newArrivals.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
-      </section>
-
-      {/* 6. Social Commerce Banner CTA */}
-      <section className="bg-gradient-to-r from-rose-900 via-rose-800 to-rose-950 rounded-3xl p-8 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 my-8">
-        <div className="space-y-2 text-center md:text-start max-w-lg">
-          <span className="text-xs text-rose-200 font-bold uppercase tracking-wider">
-            تسوقي براحة تامة من المنزل
-          </span>
-          <h3 className="text-2xl sm:text-3xl font-bold font-serif">
-            اختاري منتجاتك وسنرسل طلبك مباشرة للواتساب
-          </h3>
-          <p className="text-xs sm:text-sm text-rose-100/90 leading-relaxed">
-            استمتعي بتجربة تسوق اجتماعية سهلة وسريعة مع إمكانية مراجعة المقاسات والألوان مع خدمة العملاء مباشرة.
-          </p>
-        </div>
-
+      {/* 4. Bottom Quick Link to Catalog */}
+      <section className="text-center pt-4 pb-6">
         <Link
           href="/catalog"
-          className="px-8 py-3.5 rounded-full bg-white text-rose-950 font-bold text-sm shadow-lg hover:bg-rose-50 hover:scale-105 active:scale-95 transition-all shrink-0"
+          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-rose-700 hover:bg-rose-800 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all"
         >
-          ابدأي التسوق الآن
+          <span>تصفحي كل الكتالوج والفلترة الذكية</span>
+          <ArrowLeft className="w-4 h-4" />
         </Link>
       </section>
     </div>

@@ -104,10 +104,18 @@ export const useCartStore = create<CartStore>()(
           return;
         }
 
+        const currentItem = get().items.find((item) => item.id === itemId);
+        if (!currentItem) return;
+
+        const clampedQty = clampCartQuantity(quantity, currentItem.variant.stockQuantity);
+        if (clampedQty <= 0) {
+          get().removeItem(itemId);
+          return;
+        }
+
         set((state) => ({
           items: state.items.map((item) => {
             if (item.id === itemId) {
-              const clampedQty = clampCartQuantity(quantity, item.variant.stockQuantity);
               const subtotal = calculateLineItemSubtotal(item.unitPrice, clampedQty);
               return {
                 ...item,
@@ -119,6 +127,7 @@ export const useCartStore = create<CartStore>()(
           }),
         }));
       },
+
 
       clearCart: () => {
         set({ items: [] });

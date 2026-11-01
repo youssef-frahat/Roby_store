@@ -88,13 +88,13 @@ export const Footer: React.FC<FooterProps> = ({ settings }) => {
                 </Link>
               </li>
               <li>
-                <Link href="/catalog?category=abayas" className="hover:text-rose-300 transition-colors">
+                <Link href="/catalog?category=abayas-and-kaftans" className="hover:text-rose-300 transition-colors">
                   العبايات والقفاطين
                 </Link>
               </li>
               <li>
-                <Link href="/catalog?category=pajamas-and-homewear" className="hover:text-rose-300 transition-colors">
-                  البيجامات وملابس المنزل
+                <Link href="/catalog?category=modest-dresses" className="hover:text-rose-300 transition-colors">
+                  الفساتين المحتشمة
                 </Link>
               </li>
               <li>
@@ -103,7 +103,7 @@ export const Footer: React.FC<FooterProps> = ({ settings }) => {
                 </Link>
               </li>
               <li>
-                <Link href="/catalog?category=bedsheets-and-linens" className="hover:text-rose-300 transition-colors">
+                <Link href="/catalog?category=bedding-and-sheets" className="hover:text-rose-300 transition-colors">
                   أطقم السرير والملايات الفاخرة
                 </Link>
               </li>
@@ -174,8 +174,12 @@ export const Footer: React.FC<FooterProps> = ({ settings }) => {
               كتالوج المنتجات
             </Link>
             <span>•</span>
-            <Link href="/admin/settings" className="hover:text-rose-300">
-              إعدادات المتجر
+            <Link href="/catalog?category=womens-fashion" className="hover:text-rose-300">
+              أزياء حريمي
+            </Link>
+            <span>•</span>
+            <Link href="/catalog?category=home-textiles" className="hover:text-rose-300">
+              مفروشات
             </Link>
           </div>
         </div>

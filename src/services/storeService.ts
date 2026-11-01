@@ -66,7 +66,7 @@ export interface IStoreService {
   updateSettings(settings: UpdateStoreSettingsInput): Promise<StoreSettings>;
 
   // Optional simulation controls for testing
-  setSimulatedError?(error: '500' | 'network' | null): void;
+  setSimulatedError?(error: '500' | 'network' | 'none' | null): void;
   setSimulateEmpty?(empty: boolean): void;
   setSimulatedDelay?(ms: number): void;
   resetSimulation?(): void;

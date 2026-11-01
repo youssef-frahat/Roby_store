@@ -110,7 +110,12 @@ export function calculateCartSummary(
   let shippingFee = 0;
   if (items.length > 0 && governorate) {
     if (governoratesList && governoratesList.length > 0) {
-      const govInfo = governoratesList.find((g) => g.code === governorate);
+      const govInfo = governoratesList.find(
+        (g) =>
+          g.code === governorate ||
+          g.nameAr === governorate ||
+          g.nameEn.toLowerCase() === governorate.toLowerCase()
+      );
       shippingFee = govInfo ? govInfo.shippingFee : 50;
     } else {
       shippingFee = 50;
