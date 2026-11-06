@@ -25,6 +25,7 @@ import { getStoreService } from '@/services/storeService';
 import { Product, Category, ProductVariant, AdminMetrics } from '@/types/store';
 import { Order, OrderStatus } from '@/types/order';
 import { formatEGP } from '@/utils/pricing';
+import ProfitSalesAnalytics from '@/components/admin/analytics/ProfitSalesAnalytics';
 
 interface LowStockItem {
   productId: string;
@@ -357,6 +358,9 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Financial Profit & Sales Velocity Analytics (Daily, Weekly, Monthly, All-Time) */}
+      <ProfitSalesAnalytics orders={orders} />
 
       {/* Main Grid: Recent Orders & Low Stock Radar */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

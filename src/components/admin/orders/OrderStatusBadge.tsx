@@ -23,6 +23,7 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   shipped: 'تم الشحن',
   delivered: 'تم التسليم',
   cancelled: 'ملغي',
+  cancelled_or_returned: 'ملغي أو مرتجع',
 };
 
 export default function OrderStatusBadge({
@@ -82,12 +83,13 @@ export default function OrderStatusBadge({
       );
 
     case 'cancelled':
+    case 'cancelled_or_returned':
       return (
         <span
           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-50 text-red-800 border border-red-200 ${className}`}
         >
           {showIcon && <XCircle className="w-3.5 h-3.5 text-red-600 shrink-0" />}
-          <span>{ORDER_STATUS_LABELS.cancelled}</span>
+          <span>{ORDER_STATUS_LABELS[status] || 'ملغي أو مرتجع'}</span>
         </span>
       );
 

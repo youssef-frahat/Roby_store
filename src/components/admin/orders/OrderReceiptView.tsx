@@ -70,6 +70,12 @@ const STATUS_CONFIG: Record<
     colorClass: 'bg-red-50 text-red-900 border-red-300',
     printBadgeClass: 'border-red-600 text-red-900',
   },
+  cancelled_or_returned: {
+    labelAr: 'ملغي أو مرتجع',
+    labelEn: 'Cancelled or Returned',
+    colorClass: 'bg-red-50 text-red-900 border-red-300',
+    printBadgeClass: 'border-red-600 text-red-900',
+  },
 };
 
 export default function OrderReceiptView({

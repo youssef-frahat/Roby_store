@@ -162,6 +162,9 @@ export interface PromotionalBanner {
   imageUrl: string;
   /** Target category slug for routing upon click */
   targetCategorySlug?: string;
+  /** Target specific product ID or slug for direct routing upon click */
+  targetProductId?: string;
+  targetProductSlug?: string;
   /** Custom target URL */
   targetUrl?: string;
   /** Whether banner is active */

@@ -73,7 +73,8 @@ export type OrderStatus =
   | 'confirmed'
   | 'shipped'
   | 'delivered'
-  | 'cancelled';
+  | 'cancelled'
+  | 'cancelled_or_returned';
 
 export type DispatchChannel = 'whatsapp' | 'instagram' | 'facebook' | 'web';
 

@@ -78,6 +78,7 @@ export default function OrderFiltersBar({
             <option value="confirmed">{ORDER_STATUS_LABELS.confirmed}</option>
             <option value="shipped">{ORDER_STATUS_LABELS.shipped}</option>
             <option value="delivered">{ORDER_STATUS_LABELS.delivered}</option>
+            <option value="cancelled_or_returned">{ORDER_STATUS_LABELS.cancelled_or_returned}</option>
             <option value="cancelled">{ORDER_STATUS_LABELS.cancelled}</option>
           </select>
           <div className="absolute inset-y-0 end-3 flex items-center pointer-events-none text-charcoal-400">

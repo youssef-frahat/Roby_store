@@ -10,23 +10,32 @@ import {
   CheckCircle2,
   AlertCircle,
   X,
+  LayoutGrid,
+  ListFilter,
 } from 'lucide-react';
 import { Order, OrderStatus } from '@/types/order';
 import { getStoreService } from '@/services/storeService';
 import OrdersTable from '@/components/admin/orders/OrdersTable';
 import OrderFiltersBar from '@/components/admin/orders/OrderFiltersBar';
 import OrderDetailsDrawer from '@/components/admin/orders/OrderDetailsDrawer';
+import OrdersKanbanBoard from '@/components/admin/orders/OrdersKanbanBoard';
 
 interface ToastFeedback {
   type: 'success' | 'error';
   message: string;
 }
 
-export default function AdminOrdersPage() {
+export default function AdminOrdersPage(props: {
+  params?: Record<string, string | string[]>;
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const searchParams = props?.searchParams;
+  const initialView = searchParams?.view === 'kanban' ? 'kanban' : 'table';
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [feedback, setFeedback] = useState<ToastFeedback | null>(null);
+  const [viewMode, setViewMode] = useState<'kanban' | 'table'>(initialView);
 
   // Filters State
   const [searchQuery, setSearchQuery] = useState('');
@@ -208,17 +217,45 @@ export default function AdminOrdersPage() {
           </p>
         </div>
 
-        {/* Refresh Button */}
-        <button
-          onClick={() => loadOrders(true)}
-          disabled={isLoading || isRefreshing}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white border border-rose-200 text-charcoal-700 hover:text-[#800020] hover:bg-rose-50/50 text-xs font-bold transition-all shadow-2xs disabled:opacity-60"
-        >
-          <RefreshCw
-            className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#800020]' : ''}`}
-          />
-          <span>{isRefreshing ? 'جارٍ التحديث...' : 'تحديث البيانات'}</span>
-        </button>
+        <div className="flex items-center gap-2">
+          {/* View Mode Toggle: Kanban vs Table */}
+          <div className="flex items-center bg-white p-1 rounded-2xl border border-rose-200 shadow-2xs">
+            <button
+              onClick={() => setViewMode('kanban')}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                viewMode === 'kanban'
+                  ? 'bg-[#800020] text-white shadow-xs'
+                  : 'text-charcoal-600 hover:text-charcoal-900'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>لوحة كانبان</span>
+            </button>
+            <button
+              onClick={() => setViewMode('table')}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                viewMode === 'table'
+                  ? 'bg-[#800020] text-white shadow-xs'
+                  : 'text-charcoal-600 hover:text-charcoal-900'
+              }`}
+            >
+              <ListFilter className="w-3.5 h-3.5" />
+              <span>جدول تفصيلي</span>
+            </button>
+          </div>
+
+          {/* Refresh Button */}
+          <button
+            onClick={() => loadOrders(true)}
+            disabled={isLoading || isRefreshing}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-rose-200 text-charcoal-700 hover:text-[#800020] hover:bg-rose-50/50 text-xs font-bold transition-all shadow-2xs disabled:opacity-60"
+          >
+            <RefreshCw
+              className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#800020]' : ''}`}
+            />
+            <span>{isRefreshing ? 'تحديث' : 'تحديث البيانات'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Toast Feedback Notification */}
@@ -336,13 +373,21 @@ export default function AdminOrdersPage() {
         onResetFilters={handleResetFilters}
       />
 
-      {/* Interactive Orders Table */}
-      <OrdersTable
-        orders={filteredOrders}
-        isLoading={isLoading}
-        onViewOrder={handleViewOrder}
-        onStatusChange={handleStatusChange}
-      />
+      {/* Interactive Orders View (Kanban Board or Detailed Table) */}
+      {viewMode === 'kanban' ? (
+        <OrdersKanbanBoard
+          orders={filteredOrders}
+          onStatusChange={handleStatusChange}
+          onSelectOrder={handleViewOrder}
+        />
+      ) : (
+        <OrdersTable
+          orders={filteredOrders}
+          isLoading={isLoading}
+          onViewOrder={handleViewOrder}
+          onStatusChange={handleStatusChange}
+        />
+      )}
 
       {/* Slide-over Order Details Drawer */}
       <OrderDetailsDrawer

@@ -55,6 +55,18 @@ export interface IStoreService {
   /** Fetch active promotional banners */
   getPromotionalBanners(): Promise<PromotionalBanner[]>;
 
+  /** Fetch all promotional banners including inactive ones (Admin operation) */
+  getAllBanners(): Promise<PromotionalBanner[]>;
+
+  /** Create new promotional banner */
+  createBanner(banner: Omit<PromotionalBanner, 'id'>): Promise<PromotionalBanner>;
+
+  /** Update existing promotional banner */
+  updateBanner(id: string, updates: Partial<PromotionalBanner>): Promise<PromotionalBanner>;
+
+  /** Delete promotional banner */
+  deleteBanner(id: string): Promise<boolean>;
+
   /** Fetch governorates list with shipping rates */
   getGovernorates(): Promise<GovernorateInfo[]>;
 

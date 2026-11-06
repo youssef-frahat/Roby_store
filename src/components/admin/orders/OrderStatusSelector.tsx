@@ -19,6 +19,7 @@ const STATUS_OPTIONS: { value: OrderStatus; label: string }[] = [
   { value: 'confirmed', label: ORDER_STATUS_LABELS.confirmed },
   { value: 'shipped', label: ORDER_STATUS_LABELS.shipped },
   { value: 'delivered', label: ORDER_STATUS_LABELS.delivered },
+  { value: 'cancelled_or_returned', label: ORDER_STATUS_LABELS.cancelled_or_returned },
   { value: 'cancelled', label: ORDER_STATUS_LABELS.cancelled },
 ];
 

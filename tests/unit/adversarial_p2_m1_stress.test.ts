@@ -655,7 +655,7 @@ describe('Milestone P2-M1 Adversarial Challenge & Stress Harness', () => {
       expect(sqlContent).toContain("CHECK (color_hex ~* '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$')");
       // Order status enum check
       expect(sqlContent).toContain(
-        "status IN ('pending_dispatch', 'dispatched_whatsapp', 'confirmed', 'shipped', 'delivered', 'cancelled')"
+        "status IN ('pending_dispatch', 'dispatched_whatsapp', 'confirmed', 'shipped', 'delivered', 'cancelled', 'cancelled_or_returned')"
       );
       // Singleton store settings check
       expect(sqlContent).toContain("CHECK (id = 'default')");

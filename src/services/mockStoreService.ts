@@ -76,6 +76,10 @@ export class MockStoreService implements IStoreService {
         if (savedOrders) {
           this.orders = JSON.parse(savedOrders);
         }
+        const savedBanners = window.localStorage.getItem('roby_store_banners');
+        if (savedBanners) {
+          this.banners = JSON.parse(savedBanners);
+        }
       } catch (e) {
         // ignore
       }
@@ -412,6 +416,59 @@ export class MockStoreService implements IStoreService {
       .filter((b) => b.isActive)
       .sort((a, b) => a.displayOrder - b.displayOrder);
     return JSON.parse(JSON.stringify(activeBanners));
+  }
+
+  public async getAllBanners(): Promise<PromotionalBanner[]> {
+    await this.applySimulation();
+    if (this.simulateEmpty) return [];
+    const sorted = [...this.banners].sort((a, b) => a.displayOrder - b.displayOrder);
+    return JSON.parse(JSON.stringify(sorted));
+  }
+
+  public async createBanner(banner: Omit<PromotionalBanner, 'id'>): Promise<PromotionalBanner> {
+    await this.applySimulation();
+    const newBanner: PromotionalBanner = {
+      ...banner,
+      id: `banner_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      displayOrder: banner.displayOrder ?? this.banners.length + 1,
+      isActive: banner.isActive ?? true,
+    };
+    this.banners.push(newBanner);
+    this.saveBannersToStorage();
+    return JSON.parse(JSON.stringify(newBanner));
+  }
+
+  public async updateBanner(id: string, updates: Partial<PromotionalBanner>): Promise<PromotionalBanner> {
+    await this.applySimulation();
+    const index = this.banners.findIndex((b) => b.id === id);
+    if (index === -1) {
+      throw new Error(`Banner with ID ${id} not found`);
+    }
+    const updated = { ...this.banners[index], ...updates };
+    this.banners[index] = updated;
+    this.saveBannersToStorage();
+    return JSON.parse(JSON.stringify(updated));
+  }
+
+  public async deleteBanner(id: string): Promise<boolean> {
+    await this.applySimulation();
+    const initialLen = this.banners.length;
+    this.banners = this.banners.filter((b) => b.id !== id);
+    if (this.banners.length < initialLen) {
+      this.saveBannersToStorage();
+      return true;
+    }
+    return false;
+  }
+
+  private saveBannersToStorage(): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        window.localStorage.setItem('roby_store_banners', JSON.stringify(this.banners));
+      } catch (e) {
+        // ignore
+      }
+    }
   }
 
   public async getGovernorates(): Promise<GovernorateInfo[]> {

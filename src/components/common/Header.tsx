@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingBag, Search, Menu, X, Phone, Heart } from 'lucide-react';
+import { ShoppingBag, Search, Menu, X, Phone, Heart, Globe } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
 import { StoreSettings } from '../../types/store';
 
@@ -22,6 +22,26 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const totalItemCount = useCartStore((state) => state.getItemCount());
+  const [currentLang, setCurrentLang] = React.useState<'ar' | 'en'>('ar');
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedLang = (window.localStorage.getItem('roby_store_lang') as 'ar' | 'en') || 'ar';
+      setCurrentLang(savedLang);
+      document.documentElement.dir = savedLang === 'en' ? 'ltr' : 'rtl';
+      document.documentElement.lang = savedLang;
+    }
+  }, []);
+
+  const toggleLanguage = () => {
+    const nextLang = currentLang === 'ar' ? 'en' : 'ar';
+    setCurrentLang(nextLang);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('roby_store_lang', nextLang);
+      document.documentElement.dir = nextLang === 'en' ? 'ltr' : 'rtl';
+      document.documentElement.lang = nextLang;
+    }
+  };
 
   const rawWhatsapp = settings?.whatsappNumber || '201000000000';
   let cleanPhone = rawWhatsapp.replace(/\D/g, '');
@@ -108,24 +128,36 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Navigation Links (Desktop) */}
         <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-charcoal-700">
           <Link href="/" className="hover:text-rose-700 transition-colors">
-            الرئيسية
+            {currentLang === 'ar' ? 'الرئيسية' : 'Home'}
           </Link>
           <Link href="/catalog" className="hover:text-rose-700 transition-colors">
-            كل الكتالوج
+            {currentLang === 'ar' ? 'كل الكتالوج' : 'All Catalog'}
           </Link>
           <Link href="/catalog?category=abayas-and-kaftans" className="hover:text-rose-700 transition-colors">
-            العبايات
+            {currentLang === 'ar' ? 'العبايات' : 'Abayas'}
           </Link>
           <Link href="/catalog?category=womens-fashion" className="hover:text-rose-700 transition-colors">
-            الملابس الحريمي
+            {currentLang === 'ar' ? 'الملابس الحريمي' : "Women's Fashion"}
           </Link>
           <Link href="/catalog?category=home-textiles" className="hover:text-rose-700 transition-colors">
-            المفروشات المنزلية
+            {currentLang === 'ar' ? 'المفروشات المنزلية' : 'Home Textiles'}
           </Link>
         </nav>
 
         {/* Action Icons */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Language Switcher (AR ⇄ EN) */}
+          <button
+            type="button"
+            onClick={toggleLanguage}
+            title={currentLang === 'ar' ? 'Switch to English' : 'التحويل للغة العربية'}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-900 border border-rose-200 text-xs font-black transition-all shadow-2xs hover:scale-105 active:scale-95"
+            aria-label="تغيير لغة المتجر"
+          >
+            <Globe className="w-3.5 h-3.5 text-rose-700" />
+            <span>{currentLang === 'ar' ? 'English' : 'عربي'}</span>
+          </button>
+
           {/* Cart Trigger */}
           <button
             type="button"
@@ -164,39 +196,51 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 hover:bg-rose-50 rounded-md"
             >
-              الرئيسية
+              {currentLang === 'ar' ? 'الرئيسية' : 'Home'}
             </Link>
             <Link
               href="/catalog"
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 hover:bg-rose-50 rounded-md"
             >
-              جميع المنتجات
+              {currentLang === 'ar' ? 'جميع المنتجات' : 'All Products'}
             </Link>
             <Link
               href="/catalog?category=abayas-and-kaftans"
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 hover:bg-rose-50 rounded-md text-rose-700 font-semibold"
             >
-              العبايات والقفاطين
+              {currentLang === 'ar' ? 'العبايات والقفاطين' : 'Abayas & Kaftans'}
             </Link>
             <Link
               href="/catalog?category=womens-fashion"
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 hover:bg-rose-50 rounded-md"
             >
-              الملابس الحريمي
+              {currentLang === 'ar' ? 'الملابس الحريمي' : "Women's Fashion"}
             </Link>
             <Link
               href="/catalog?category=home-textiles"
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 hover:bg-rose-50 rounded-md"
             >
-              المفروشات والمنسوجات
+              {currentLang === 'ar' ? 'المفروشات والمنسوجات' : 'Home Bedding & Textiles'}
             </Link>
           </div>
 
-          <div className="pt-3 border-t border-rose-100">
+          <div className="pt-3 border-t border-rose-100 flex flex-col gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                toggleLanguage();
+                setMobileMenuOpen(false);
+              }}
+              className="flex items-center justify-center gap-2 py-2 px-4 bg-rose-50 hover:bg-rose-100 text-rose-900 rounded-xl text-xs font-black border border-rose-200 transition-colors"
+            >
+              <Globe className="w-4 h-4 text-rose-700" />
+              <span>{currentLang === 'ar' ? 'تغيير اللغة إلى English' : 'Switch Language to العربية'}</span>
+            </button>
+
             <a
               href={whatsappUrl}
               target="_blank"

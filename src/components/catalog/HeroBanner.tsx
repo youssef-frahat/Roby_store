@@ -33,6 +33,16 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ banners }) => {
     setCurrentIndex((prev) => (prev + 1) % banners.length);
   };
 
+  const getDestinationUrl = () => {
+    if (current.targetUrl) return current.targetUrl;
+    if (current.targetProductSlug) return `/product/${current.targetProductSlug}`;
+    if (current.targetProductId) return `/product/${current.targetProductId}`;
+    if (current.targetCategorySlug) return `/catalog?category=${current.targetCategorySlug}`;
+    return '/catalog';
+  };
+
+  const destinationUrl = getDestinationUrl();
+
   return (
     <div className="relative w-full overflow-hidden rounded-3xl bg-charcoal-900 shadow-md my-4">
       {/* Background Image Container */}
@@ -75,10 +85,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ banners }) => {
 
             <div className="pt-2">
               <Link
-                href={
-                  current.targetUrl ||
-                  (current.targetCategorySlug ? `/catalog?category=${current.targetCategorySlug}` : '/catalog')
-                }
+                href={destinationUrl}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-rose-600 hover:bg-rose-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-rose-900/40 transition-all hover:scale-105 active:scale-95"
               >
                 <span>{current.buttonTextAr || current.ctaTextAr || 'تسوقي الآن'}</span>

@@ -14,6 +14,7 @@ import {
   X,
   PlusCircle,
   Shield,
+  Sparkles,
 } from 'lucide-react';
 
 export default function AdminLayout({
@@ -62,6 +63,12 @@ export default function AdminLayout({
       href: '/admin/products',
       icon: Package,
       active: pathname.startsWith('/admin/products'),
+    },
+    {
+      title: 'بانرات العروض',
+      href: '/admin/banners',
+      icon: Sparkles,
+      active: pathname.startsWith('/admin/banners'),
     },
     {
       title: 'إعدادات المتجر',

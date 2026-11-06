@@ -3,7 +3,7 @@
  * Location: src/utils/order.ts
  */
 
-import { Order } from '../types/order';
+import { Order, OrderStatus } from '../types/order';
 
 /**
  * Generates human-readable, deterministic order references (e.g. ROBY-20261028-4821)
@@ -112,4 +112,64 @@ export function buildAdminCustomerWhatsAppUrl(order: Order): string {
 
   return buildWhatsAppOrderUrl(customerPhone, message);
 }
+
+/**
+ * Builds tailored 1-Click WhatsApp status update messages for customer notification
+ * across each stage of order fulfillment (Confirmed, Shipped, Delivered, Cancelled/Returned).
+ */
+export function buildOrderStatusWhatsAppUrl(order: Order, targetStatus: OrderStatus): string {
+  const customerPhone = order.customer.phone;
+  const { fullName, governorate } = order.customer;
+  const { orderId, pricing } = order;
+
+  let body = '';
+  switch (targetStatus) {
+    case 'confirmed':
+      body =
+        `مرحباً ${fullName} 👋🌸✨\n` +
+        `يسعدنا إبلاغكِ بأنه تم تأكيد وتجهيز طلبكِ رقم: #${orderId} بنجاح لدى روبي ستور (ROBY STORE).\n` +
+        `💵 إجمالي الطلب: ${pricing.grandTotal} ج.م.\n` +
+        `📦 يتم الآن تغليف المنتجات بعناية لتسليمها لشركة الشحن.\n\n` +
+        `شكراً لثقتكِ بروبي ستور!`;
+      break;
+
+    case 'shipped':
+      body =
+        `مرحباً ${fullName} 🚚📦\n` +
+        `شحنتكِ من متجر روبي ستور برقم: #${orderId} الآن مع مندوب التوصيل وفي طريقها إليكِ بمحافظة ${governorate}.\n` +
+        `💵 المبلغ المطلوب سداده عند الاستلام: ${pricing.grandTotal} ج.م.\n` +
+        `📱 يرجى إبقاء الهاتف متاحاً لسهولة تواصل المندوب معكِ.\n\n` +
+        `نتمنى لكِ يوماً سعيداً!`;
+      break;
+
+    case 'delivered':
+      body =
+        `مرحباً ${fullName} 🎉💖\n` +
+        `تم تسليم طلبكِ رقم: #${orderId} بنجاح!\n` +
+        `سعدنا جداً بخدمتكِ ونتمنى أن تنال منتجات روبي ستور إعجابك ورضاكِ تماماً.\n` +
+        `🌸 يسعدنا دائماً مشاركتنا رأيكِ وتجربتكِ عبر المتجر أو الواتساب.`;
+      break;
+
+    case 'cancelled':
+    case 'cancelled_or_returned':
+      body =
+        `مرحباً ${fullName} 👋🌸\n` +
+        `بخصوص طلبكِ رقم: #${orderId} لدى متجر روبي ستور، نود إعلامكِ بأنه تم تحديث حالة الطلب إلى (ملغي / مرتجع).\n` +
+        `إذا كان لديكِ أي استفسار أو رغبة في استبدال أو إعادة الطلب، يسعدنا دائماً خدمتكِ في أي وقت.`;
+      break;
+
+    case 'pending_dispatch':
+    case 'dispatched_whatsapp':
+    default:
+      body =
+        `مرحباً ${fullName} 👋🌸\n` +
+        `تم تسجيل طلبكِ رقم: #${orderId} لدى متجر روبي ستور، وجاري مراجعته من قبل فريق العمل.\n` +
+        `💵 إجمالي الطلب: ${pricing.grandTotal} ج.م.\n` +
+        `سنتواصل معكِ فور بدء التجهيز!`;
+      break;
+  }
+
+  return buildWhatsAppOrderUrl(customerPhone, body);
+}
+
 

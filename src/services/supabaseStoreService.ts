@@ -184,6 +184,25 @@ function mapDbBannerToBanner(row: any): PromotionalBanner {
   };
 }
 
+function mapBannerToDbRow(banner: Partial<PromotionalBanner>): any {
+  const row: any = {};
+  if (banner.id !== undefined) row.id = banner.id;
+  if (banner.titleAr !== undefined) row.title_ar = banner.titleAr;
+  if (banner.titleEn !== undefined) row.title_en = banner.titleEn;
+  if (banner.subtitleAr !== undefined) row.subtitle_ar = banner.subtitleAr;
+  if (banner.subtitleEn !== undefined) row.subtitle_en = banner.subtitleEn;
+  if (banner.badgeTextAr !== undefined) row.badge_text_ar = banner.badgeTextAr;
+  if (banner.badgeTextEn !== undefined) row.badge_text_en = banner.badgeTextEn;
+  if (banner.buttonTextAr !== undefined) row.button_text_ar = banner.buttonTextAr;
+  if (banner.buttonTextEn !== undefined) row.button_text_en = banner.buttonTextEn;
+  if (banner.imageUrl !== undefined) row.image_url = banner.imageUrl;
+  if (banner.targetCategorySlug !== undefined) row.target_category_slug = banner.targetCategorySlug;
+  if (banner.targetUrl !== undefined) row.target_url = banner.targetUrl;
+  if (banner.isActive !== undefined) row.is_active = banner.isActive;
+  if (banner.displayOrder !== undefined) row.display_order = banner.displayOrder;
+  return row;
+}
+
 function mapDbGovernorateToGovernorate(row: any): GovernorateInfo {
   return {
     code: row.code,
@@ -504,6 +523,62 @@ export class SupabaseStoreService implements IStoreService {
       throw new ApiError(`Failed to fetch promotional banners: ${error.message}`, 500);
     }
     return (data || []).map(mapDbBannerToBanner);
+  }
+
+  public async getAllBanners(): Promise<PromotionalBanner[]> {
+    const { data, error } = await this.client
+      .from('promotional_banners')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error) {
+      throw new ApiError(`Failed to fetch all promotional banners: ${error.message}`, 500);
+    }
+    return (data || []).map(mapDbBannerToBanner);
+  }
+
+  public async createBanner(banner: Omit<PromotionalBanner, 'id'>): Promise<PromotionalBanner> {
+    const bannerId = `banner_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const dbRow = mapBannerToDbRow({ ...banner, id: bannerId });
+
+    const { data, error } = await this.client
+      .from('promotional_banners')
+      .insert(dbRow)
+      .select()
+      .single();
+
+    if (error) {
+      throw new ApiError(`Failed to create promotional banner: ${error.message}`, 500);
+    }
+    return mapDbBannerToBanner(data);
+  }
+
+  public async updateBanner(id: string, updates: Partial<PromotionalBanner>): Promise<PromotionalBanner> {
+    const dbRow = mapBannerToDbRow(updates);
+
+    const { data, error } = await this.client
+      .from('promotional_banners')
+      .update(dbRow)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      throw new ApiError(`Failed to update promotional banner: ${error.message}`, 500);
+    }
+    return mapDbBannerToBanner(data);
+  }
+
+  public async deleteBanner(id: string): Promise<boolean> {
+    const { error } = await this.client
+      .from('promotional_banners')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      throw new ApiError(`Failed to delete promotional banner: ${error.message}`, 500);
+    }
+    return true;
   }
 
   // ==========================================

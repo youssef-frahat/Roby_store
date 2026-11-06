@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS public.orders (
     currency TEXT NOT NULL DEFAULT 'EGP',
     pricing_summary JSONB NOT NULL,
     status TEXT NOT NULL DEFAULT 'pending_dispatch' CHECK (
-        status IN ('pending_dispatch', 'dispatched_whatsapp', 'confirmed', 'shipped', 'delivered', 'cancelled')
+        status IN ('pending_dispatch', 'dispatched_whatsapp', 'confirmed', 'shipped', 'delivered', 'cancelled', 'cancelled_or_returned')
     ),
     dispatch_channel TEXT NOT NULL DEFAULT 'whatsapp' CHECK (
         dispatch_channel IN ('whatsapp', 'instagram', 'facebook', 'web')
