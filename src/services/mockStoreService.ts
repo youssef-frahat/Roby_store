@@ -7,6 +7,8 @@ import {
   Category,
   CategoryTreeItem,
   Product,
+  ProductVariant,
+  VariantColor,
   ProductFilterParams,
   PaginatedResponse,
   PromotionalBanner,
@@ -16,8 +18,12 @@ import {
   ApiError,
   StoreSettings,
   UpdateStoreSettingsInput,
+  CreateProductInput,
+  UpdateProductInput,
+  OrderFilterParams,
+  AdminMetrics,
 } from '../types/store';
-import { CreateOrderPayload, OrderSubmitResult, Order } from '../types/order';
+import { CreateOrderPayload, OrderSubmitResult, Order, OrderStatus } from '../types/order';
 import { IStoreService } from './storeService';
 import { calculateCartSummary } from '../utils/pricing';
 import {
@@ -44,6 +50,7 @@ export class MockStoreService implements IStoreService {
   private banners: PromotionalBanner[];
   private governorates: GovernorateInfo[];
   private settings: StoreSettings;
+  private orders: Order[];
 
   constructor(delayMs = 0) {
     this.delayMs = delayMs;
@@ -52,11 +59,21 @@ export class MockStoreService implements IStoreService {
     this.banners = JSON.parse(JSON.stringify(bannersData)) as PromotionalBanner[];
     this.governorates = JSON.parse(JSON.stringify(governoratesData)) as GovernorateInfo[];
     this.settings = JSON.parse(JSON.stringify(settingsData)) as StoreSettings;
+    this.orders = [];
+
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
-        const saved = localStorage.getItem('roby_store_settings');
-        if (saved) {
-          this.settings = { ...this.settings, ...JSON.parse(saved) };
+        const savedSettings = window.localStorage.getItem('roby_store_settings');
+        if (savedSettings) {
+          this.settings = { ...this.settings, ...JSON.parse(savedSettings) };
+        }
+        const savedProducts = window.localStorage.getItem('roby_store_products');
+        if (savedProducts) {
+          this.products = JSON.parse(savedProducts);
+        }
+        const savedOrders = window.localStorage.getItem('roby_store_orders');
+        if (savedOrders) {
+          this.orders = JSON.parse(savedOrders);
         }
       } catch (e) {
         // ignore
@@ -89,9 +106,11 @@ export class MockStoreService implements IStoreService {
     this.simulateEmpty = false;
     this.delayMs = 0;
     this.settings = JSON.parse(JSON.stringify(settingsData)) as StoreSettings;
+    this.products = JSON.parse(JSON.stringify(productsData)) as Product[];
+    this.orders = [];
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
-        const saved = localStorage.getItem('roby_store_settings');
+        const saved = window.localStorage.getItem('roby_store_settings');
         if (saved) {
           this.settings = { ...this.settings, ...JSON.parse(saved) };
         }
@@ -539,6 +558,15 @@ export class MockStoreService implements IStoreService {
     order.formattedSocialMessage = formattedMessage;
     order.whatsappDirectUrl = whatsappUrl;
 
+    this.orders.unshift(order);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        window.localStorage.setItem('roby_store_orders', JSON.stringify(this.orders));
+      } catch (e) {
+        // ignore
+      }
+    }
+
     return {
       success: true,
       order,
@@ -574,12 +602,322 @@ export class MockStoreService implements IStoreService {
     };
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
-        localStorage.setItem('roby_store_settings', JSON.stringify(this.settings));
+        window.localStorage.setItem('roby_store_settings', JSON.stringify(this.settings));
       } catch (e) {
         // ignore
       }
     }
     return JSON.parse(JSON.stringify(this.settings));
+  }
+
+  // ==========================================
+  // Administrative Catalog Mutations (R2, R3, R4)
+  // ==========================================
+
+  public async createProduct(input: CreateProductInput): Promise<Product> {
+    await this.applySimulation();
+
+    if (!input.titleAr || !input.titleAr.trim()) {
+      throw new ApiError('Arabic title is required', 400);
+    }
+    if (!input.titleEn || !input.titleEn.trim()) {
+      throw new ApiError('English title is required', 400);
+    }
+    if (input.basePrice === undefined || input.basePrice <= 0) {
+      throw new ApiError('Base price must be greater than zero', 400);
+    }
+    if (input.discountPrice !== undefined && input.discountPrice >= input.basePrice) {
+      throw new ApiError('Discount price must be less than base price', 400);
+    }
+    if (!input.categoryIds || input.categoryIds.length === 0) {
+      throw new ApiError('At least one category is required', 400);
+    }
+    if (!input.variants || input.variants.length === 0) {
+      throw new ApiError('At least one variant is required', 400);
+    }
+
+    const timestamp = Date.now();
+    const id = `prod_${timestamp}`;
+    const slug =
+      input.slug && input.slug.trim()
+        ? input.slug.trim()
+        : input.titleEn
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '');
+
+    const primaryCategorySlug =
+      input.primaryCategorySlug ||
+      this.categories.find((c) => input.categoryIds.includes(c.id))?.slug ||
+      '';
+
+    const variants: ProductVariant[] = input.variants.map((v, i) => {
+      const stockQuantity = v.stockQuantity ?? 0;
+      return {
+        id: v.id || `var_${timestamp}_${i}`,
+        sku: v.sku,
+        color: v.color,
+        size: v.size,
+        priceAdjustment: v.priceAdjustment ?? 0,
+        priceOverride: v.priceOverride,
+        stockQuantity,
+        inStock: v.inStock !== undefined ? v.inStock : stockQuantity > 0,
+        variantImageUrl: v.variantImageUrl,
+      };
+    });
+
+    const colorMap = new Map<string, VariantColor>();
+    variants.forEach((v) => {
+      if (v.color && v.color.nameEn) {
+        colorMap.set(v.color.nameEn, v.color);
+      }
+    });
+    const availableColors = Array.from(colorMap.values());
+    const availableSizes = Array.from(new Set(variants.map((v) => v.size).filter(Boolean)));
+    const totalStock = variants.reduce((sum, v) => sum + v.stockQuantity, 0);
+    const hasStock = totalStock > 0;
+    const now = new Date().toISOString();
+
+    const newProduct: Product = {
+      id,
+      slug,
+      titleAr: input.titleAr,
+      titleEn: input.titleEn,
+      descriptionAr: input.descriptionAr || '',
+      descriptionEn: input.descriptionEn || '',
+      basePrice: input.basePrice,
+      discountPrice: input.discountPrice,
+      currency: 'EGP',
+      images: input.images || [],
+      categoryIds: input.categoryIds,
+      primaryCategorySlug,
+      tags: input.tags || [],
+      rating: 5.0,
+      reviewCount: 0,
+      isFeatured: Boolean(input.isFeatured),
+      isNewArrival: input.isNewArrival !== undefined ? Boolean(input.isNewArrival) : true,
+      variants,
+      availableColors,
+      availableSizes,
+      totalStock,
+      hasStock,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    this.products.unshift(newProduct);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        window.localStorage.setItem('roby_store_products', JSON.stringify(this.products));
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    return JSON.parse(JSON.stringify(newProduct));
+  }
+
+  public async updateProduct(id: string, input: UpdateProductInput): Promise<Product> {
+    await this.applySimulation();
+
+    const index = this.products.findIndex((p) => p.id === id);
+    if (index === -1) {
+      throw new ApiError('Product not found', 404);
+    }
+
+    const existing = this.products[index];
+
+    let variants = existing.variants;
+    let availableColors = existing.availableColors;
+    let availableSizes = existing.availableSizes;
+    let totalStock = existing.totalStock;
+    let hasStock = existing.hasStock;
+
+    if (input.variants) {
+      const timestamp = Date.now();
+      variants = input.variants.map((v, i) => {
+        const stockQuantity = v.stockQuantity ?? 0;
+        return {
+          id: v.id || `var_${timestamp}_${i}`,
+          sku: v.sku,
+          color: v.color,
+          size: v.size,
+          priceAdjustment: v.priceAdjustment ?? 0,
+          priceOverride: v.priceOverride,
+          stockQuantity,
+          inStock: v.inStock !== undefined ? v.inStock : stockQuantity > 0,
+          variantImageUrl: v.variantImageUrl,
+        };
+      });
+
+      const colorMap = new Map<string, VariantColor>();
+      variants.forEach((v) => {
+        if (v.color && v.color.nameEn) {
+          colorMap.set(v.color.nameEn, v.color);
+        }
+      });
+      availableColors = Array.from(colorMap.values());
+      availableSizes = Array.from(new Set(variants.map((v) => v.size).filter(Boolean)));
+      totalStock = variants.reduce((sum, v) => sum + v.stockQuantity, 0);
+      hasStock = totalStock > 0;
+    }
+
+    const updatedProduct: Product = {
+      ...existing,
+      ...input,
+      variants,
+      availableColors,
+      availableSizes,
+      totalStock,
+      hasStock,
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.products[index] = updatedProduct;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        window.localStorage.setItem('roby_store_products', JSON.stringify(this.products));
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    return JSON.parse(JSON.stringify(updatedProduct));
+  }
+
+  public async deleteProduct(id: string): Promise<boolean> {
+    await this.applySimulation();
+
+    const index = this.products.findIndex((p) => p.id === id);
+    if (index === -1) {
+      return false;
+    }
+
+    this.products.splice(index, 1);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        window.localStorage.setItem('roby_store_products', JSON.stringify(this.products));
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    return true;
+  }
+
+  // ==========================================
+  // Administrative Order Management API
+  // ==========================================
+
+  public async getOrders(params?: OrderFilterParams): Promise<PaginatedResponse<Order>> {
+    await this.applySimulation();
+
+    let filtered = [...this.orders];
+
+    if (params?.status) {
+      filtered = filtered.filter((o) => o.status === params.status);
+    }
+    if (params?.governorate) {
+      filtered = filtered.filter((o) => o.customer.governorate === params.governorate);
+    }
+    if (params?.searchQuery && params.searchQuery.trim()) {
+      const q = params.searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(
+        (o) =>
+          o.orderId.toLowerCase().includes(q) ||
+          o.customer.fullName.toLowerCase().includes(q) ||
+          o.customer.phone.includes(q)
+      );
+    }
+
+    const page = Math.max(1, params?.page || 1);
+    const pageSize = Math.max(1, params?.pageSize || 20);
+    const total = filtered.length;
+    const totalPages = Math.ceil(total / pageSize) || 1;
+    const startIndex = (page - 1) * pageSize;
+    const data = filtered.slice(startIndex, startIndex + pageSize);
+
+    return {
+      data: JSON.parse(JSON.stringify(data)),
+      total,
+      page,
+      pageSize,
+      totalPages,
+      hasNextPage: page < totalPages,
+      hasPrevPage: page > 1,
+    };
+  }
+
+  public async getOrderById(orderId: string): Promise<Order | null> {
+    await this.applySimulation();
+    const order = this.orders.find((o) => o.orderId === orderId);
+    return order ? JSON.parse(JSON.stringify(order)) : null;
+  }
+
+  public async updateOrderStatus(orderId: string, status: OrderStatus): Promise<Order> {
+    await this.applySimulation();
+    const order = this.orders.find((o) => o.orderId === orderId);
+    if (!order) {
+      throw new ApiError('Order not found', 404);
+    }
+
+    order.status = status;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        window.localStorage.setItem('roby_store_orders', JSON.stringify(this.orders));
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    return JSON.parse(JSON.stringify(order));
+  }
+
+  public async getAdminMetrics(): Promise<AdminMetrics> {
+    await this.applySimulation();
+
+    const totalOrders = this.orders.length;
+    const totalRevenue = this.orders
+      .filter((o) => o.status !== 'cancelled')
+      .reduce((sum, o) => sum + (o.pricing?.grandTotal || 0), 0);
+    const pendingOrdersCount = this.orders.filter(
+      (o) => o.status === 'pending_dispatch' || o.status === 'dispatched_whatsapp'
+    ).length;
+    const totalProductsCount = this.products.length;
+    const lowStockItemsCount = this.products.filter((p) => p.totalStock <= 5).length;
+    const recentOrders = this.orders.slice(0, 5);
+
+    return {
+      totalOrders,
+      totalRevenue,
+      pendingOrdersCount,
+      totalProductsCount,
+      lowStockItemsCount,
+      recentOrders: JSON.parse(JSON.stringify(recentOrders)),
+    };
+  }
+
+  public async uploadProductImage(
+    file: File | Blob,
+    customPath?: string
+  ): Promise<{ url: string; path: string }> {
+    await this.applySimulation();
+
+    const fileName = (file as File).name || `img_${Date.now()}.png`;
+    const path = customPath || `mock_uploads/${Date.now()}_${fileName}`;
+    let url = '';
+
+    if (typeof window !== 'undefined' && typeof window.URL?.createObjectURL === 'function') {
+      try {
+        url = window.URL.createObjectURL(file);
+      } catch (e) {
+        url = 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80';
+      }
+    } else {
+      url = 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80';
+    }
+
+    return { url, path };
   }
 
   // ==========================================

@@ -11,8 +11,17 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ settings }) => {
-  const whatsappPhone = settings?.whatsappNumber || '201000000000';
-  const cleanPhone = whatsappPhone.replace(/\D/g, '');
+  const rawWhatsapp = settings?.whatsappNumber || '201000000000';
+  let cleanPhone = rawWhatsapp.replace(/\D/g, '');
+  if (cleanPhone.startsWith('0020')) {
+    cleanPhone = cleanPhone.slice(2);
+  } else if (cleanPhone.startsWith('01') && cleanPhone.length === 11) {
+    cleanPhone = `2${cleanPhone}`;
+  }
+  const defaultTemplate = settings?.whatsappMessageTemplate;
+  const whatsappUrl = defaultTemplate
+    ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(defaultTemplate)}`
+    : `https://wa.me/${cleanPhone}`;
 
   return (
     <footer className="bg-charcoal-900 text-charcoal-100 border-t border-rose-950 pt-16 pb-10">
@@ -31,9 +40,11 @@ export const Footer: React.FC<FooterProps> = ({ settings }) => {
               </div>
               <div>
                 <h3 className="text-xl font-bold font-serif text-white tracking-wide">
-                  ROBY STORE
+                  {settings?.storeNameEn || 'ROBY STORE'}
                 </h3>
-                <p className="text-xs text-rose-300 font-medium">أزياء حريمي ومفروشات راقية</p>
+                <p className="text-xs text-rose-300 font-medium">
+                  {settings?.tagline || 'أزياء حريمي ومفروشات راقية'}
+                </p>
               </div>
             </div>
             <p className="text-xs text-charcoal-300 leading-relaxed">
@@ -43,7 +54,7 @@ export const Footer: React.FC<FooterProps> = ({ settings }) => {
             {/* Social Links */}
             <div className="flex items-center gap-3 pt-2">
               <a
-                href={`https://wa.me/${cleanPhone}`}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-full bg-emerald-950 text-emerald-400 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"
@@ -71,6 +82,19 @@ export const Footer: React.FC<FooterProps> = ({ settings }) => {
                   aria-label="فيسبوك"
                 >
                   <Facebook className="w-5 h-5" />
+                </a>
+              )}
+              {settings?.tiktokUrl && (
+                <a
+                  href={settings.tiktokUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-full bg-neutral-900 text-neutral-300 hover:bg-black hover:text-white flex items-center justify-center transition-colors"
+                  aria-label="تيك توك"
+                >
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.88 2.89 2.89 0 0 1-2.89-2.88 2.89 2.89 0 0 1 2.89-2.88c.32 0 .62.06.9.15V9.42a6.32 6.32 0 0 0-.9-.07A6.34 6.34 0 0 0 3 15.69 6.34 6.34 0 0 0 9.34 22a6.34 6.34 0 0 0 6.34-6.31V8.65a8.28 8.28 0 0 0 4.91 1.6V6.8c-.34-.03-.68-.07-1-.11z" />
+                  </svg>
                 </a>
               )}
             </div>

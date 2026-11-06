@@ -10,12 +10,16 @@ interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   whatsappNumber?: string;
+  freeShippingThreshold?: number;
+  enableSocialOrdering?: boolean;
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({
   isOpen,
   onClose,
   whatsappNumber = '201000000000',
+  freeShippingThreshold = 1500,
+  enableSocialOrdering = true,
 }) => {
   const {
     items,
@@ -68,6 +72,41 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <X className="w-5 h-5" />
             </button>
           </div>
+
+          {/* Free Shipping Progress Indicator */}
+          {items.length > 0 && freeShippingThreshold && (
+            <div className="px-5 py-3 bg-gradient-to-r from-rose-50 via-pink-50/40 to-rose-50 border-b border-rose-100/80">
+              {summary.subtotal >= freeShippingThreshold ? (
+                <div className="flex items-center gap-2 text-xs font-bold text-emerald-700">
+                  <span>🎉</span>
+                  <span>مبروك! طلبك مؤهل للشحن المجاني لكافة المحافظات</span>
+                </div>
+              ) : (
+                <div>
+                  <div className="flex items-center justify-between text-xs text-charcoal-700 font-medium mb-1.5">
+                    <span>
+                      أضيفي بـ{' '}
+                      <strong className="text-[#800020] font-bold">
+                        {(freeShippingThreshold - summary.subtotal).toLocaleString('ar-EG')} ج.م
+                      </strong>{' '}
+                      للحصول على شحن مجاني
+                    </span>
+                    <span className="text-[11px] text-charcoal-500 font-mono">
+                      {Math.min(100, Math.round((summary.subtotal / freeShippingThreshold) * 100))}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-rose-200/50 rounded-full h-1.5 overflow-hidden">
+                    <div
+                      className="bg-gradient-to-r from-[#800020] to-rose-600 h-full rounded-full transition-all duration-300"
+                      style={{
+                        width: `${Math.min(100, (summary.subtotal / freeShippingThreshold) * 100)}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Cart Items List */}
           <div className="flex-1 overflow-y-auto p-5 space-y-4">

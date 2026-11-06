@@ -60,21 +60,20 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-rose-50/30 py-10">
-      <div className="container mx-auto px-4 max-w-2xl">
-        {/* Top bar */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <Link
-              href="/"
-              className="text-xs text-rose-700 hover:text-rose-900 font-semibold flex items-center gap-1 mb-2"
-            >
-              <ArrowRight className="w-3.5 h-3.5" />
-              <span>العودة للمتجر</span>
-            </Link>
-            <h1 className="text-2xl font-bold font-serif text-charcoal-900">
-              ⚙️ لوحة تحكم المتجر والاتصال
-            </h1>
+    <div className="max-w-3xl mx-auto space-y-6">
+      {/* Top bar */}
+      <div className="flex items-center justify-between pb-4 border-b border-rose-100">
+        <div>
+          <Link
+            href="/admin"
+            className="text-xs text-[#800020] hover:text-[#5B0017] font-semibold flex items-center gap-1 mb-2"
+          >
+            <ArrowRight className="w-3.5 h-3.5" />
+            <span>العودة للوحة التحكم</span>
+          </Link>
+          <h1 className="text-2xl font-bold font-serif text-charcoal-900">
+            ⚙️ لوحة تحكم المتجر والاتصال
+          </h1>
             <p className="text-xs text-charcoal-500 mt-1">
               تعديل أرقام الواتساب ووسائل التواصل المربوطة باستقبال الطلبات في روبي ستور.
             </p>
@@ -209,14 +208,14 @@ export default function AdminSettingsPage() {
           <div className="pt-4 border-t border-rose-100 flex items-center justify-end">
             <button
               type="submit"
-              className="px-6 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+              className="px-6 py-3 rounded-2xl bg-[#800020] hover:bg-[#5B0017] text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2"
             >
               <Save className="w-4 h-4" />
               <span>حفظ التعديلات الآن</span>
             </button>
           </div>
         </form>
-      </div>
     </div>
   );
 }
+

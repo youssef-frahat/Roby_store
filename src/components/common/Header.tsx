@@ -23,8 +23,17 @@ export const Header: React.FC<HeaderProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const totalItemCount = useCartStore((state) => state.getItemCount());
 
-  const whatsappPhone = settings?.whatsappNumber || '201000000000';
-  const cleanPhone = whatsappPhone.replace(/\D/g, '');
+  const rawWhatsapp = settings?.whatsappNumber || '201000000000';
+  let cleanPhone = rawWhatsapp.replace(/\D/g, '');
+  if (cleanPhone.startsWith('0020')) {
+    cleanPhone = cleanPhone.slice(2);
+  } else if (cleanPhone.startsWith('01') && cleanPhone.length === 11) {
+    cleanPhone = `2${cleanPhone}`;
+  }
+  const defaultTemplate = settings?.whatsappMessageTemplate;
+  const whatsappUrl = defaultTemplate
+    ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(defaultTemplate)}`
+    : `https://wa.me/${cleanPhone}`;
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-rose-100 shadow-xs transition-all">
@@ -32,13 +41,13 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="bg-gradient-to-r from-rose-900 via-rose-800 to-rose-950 text-white text-xs py-2 px-4 text-center font-medium">
         <div className="container mx-auto flex items-center justify-between">
           <span className="hidden sm:inline">
-            ✨ مرحباً بكم في متجر روبي للأزياء والمفروشات الراقية
+            ✨ مرحباً بكم في {settings?.storeName || 'متجر روبي للأزياء والمفروشات الراقية'}
           </span>
           <span className="mx-auto sm:mx-0">
             شحن سريع لجميع محافظات جمهورية مصر العربية 🇪🇬
           </span>
           <a
-            href={`https://wa.me/${cleanPhone}`}
+            href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden md:flex items-center gap-1 hover:text-rose-200 transition-colors"
@@ -74,10 +83,10 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <div className="flex flex-col">
             <span className="text-xl font-bold font-serif tracking-wide text-rose-950 group-hover:text-rose-800 transition-colors">
-              ROBY STORE
+              {settings?.storeNameEn || 'ROBY STORE'}
             </span>
             <span className="text-[11px] text-rose-600 font-medium -mt-1">
-              أزياء حريمي ومفروشات راقية
+              {settings?.tagline || 'أزياء حريمي ومفروشات راقية'}
             </span>
           </div>
         </Link>
@@ -185,6 +194,18 @@ export const Header: React.FC<HeaderProps> = ({
             >
               المفروشات والمنسوجات
             </Link>
+          </div>
+
+          <div className="pt-3 border-t border-rose-100">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              <span>تواصل واتساب: {settings?.contactPhone || '01000000000'}</span>
+            </a>
           </div>
         </div>
       )}

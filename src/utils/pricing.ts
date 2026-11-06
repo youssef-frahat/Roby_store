@@ -166,3 +166,9 @@ export function formatPrice(amount: number, locale: 'ar-EG' | 'en-US' = 'ar-EG')
   }
   return `${rounded.toLocaleString('en-US')} EGP`;
 }
+
+/**
+ * Convenient alias for formatPrice with Egyptian Pound currency formatting.
+ */
+export const formatEGP = formatPrice;
+

@@ -288,6 +288,7 @@ export class ApiError extends Error {
 
 export interface StoreSettings {
   storeName: string;
+  storeNameEn?: string;
   tagline: string;
   whatsappNumber: string;
   whatsappMessageTemplate?: string;
@@ -295,6 +296,7 @@ export interface StoreSettings {
   instagramHandle?: string;
   facebookUrl?: string;
   messengerUrl?: string;
+  tiktokUrl?: string;
   contactPhone?: string;
   contactEmail?: string;
   storeAddress?: string;
@@ -306,5 +308,57 @@ export interface StoreSettings {
 
 export type UpdateStoreSettingsInput = Partial<StoreSettings>;
 
+// ==========================================
+// 9. Administrative Product Management & Metrics
+// ==========================================
+
+export interface CreateProductInput {
+  titleAr: string;
+  titleEn: string;
+  slug?: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  basePrice: number;
+  discountPrice?: number;
+  currency?: 'EGP';
+  images: string[];
+  categoryIds: string[];
+  primaryCategorySlug?: string;
+  tags?: string[];
+  isFeatured?: boolean;
+  isNewArrival?: boolean;
+  variants: Array<{
+    id?: string;
+    sku: string;
+    color: VariantColor;
+    size: string;
+    priceAdjustment?: number;
+    priceOverride?: number;
+    stockQuantity: number;
+    inStock?: boolean;
+    variantImageUrl?: string;
+  }>;
+}
+
+export type UpdateProductInput = Partial<CreateProductInput>;
+
+export interface OrderFilterParams {
+  status?: import('./order').OrderStatus;
+  searchQuery?: string;
+  governorate?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface AdminMetrics {
+  totalOrders: number;
+  totalRevenue: number;
+  pendingOrdersCount: number;
+  totalProductsCount: number;
+  lowStockItemsCount: number;
+  recentOrders: import('./order').Order[];
+}
+
 // Re-export Cart & Order types for convenience
 export type { CartItem, CartSummary } from './order';
+

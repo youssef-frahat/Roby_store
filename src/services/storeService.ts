@@ -15,9 +15,14 @@ import {
   StockValidationResult,
   StoreSettings,
   UpdateStoreSettingsInput,
+  CreateProductInput,
+  UpdateProductInput,
+  OrderFilterParams,
+  AdminMetrics,
 } from '../types/store';
-import { CreateOrderPayload, OrderSubmitResult } from '../types/order';
+import { CreateOrderPayload, OrderSubmitResult, Order, OrderStatus } from '../types/order';
 import { MockStoreService } from './mockStoreService';
+import { SupabaseStoreService } from './supabaseStoreService';
 
 export interface IStoreService {
   /** Fetch all categories (flat list) */
@@ -65,6 +70,16 @@ export interface IStoreService {
   /** Update store settings (Admin operation) */
   updateSettings(settings: UpdateStoreSettingsInput): Promise<StoreSettings>;
 
+  // Administrative Catalog Mutations (Requirements R2, R3, R4)
+  createProduct(input: CreateProductInput): Promise<Product>;
+  updateProduct(id: string, input: UpdateProductInput): Promise<Product>;
+  deleteProduct(id: string): Promise<boolean>;
+  getOrders(params?: OrderFilterParams): Promise<PaginatedResponse<Order>>;
+  getOrderById(orderId: string): Promise<Order | null>;
+  updateOrderStatus(orderId: string, status: OrderStatus): Promise<Order>;
+  getAdminMetrics(): Promise<AdminMetrics>;
+  uploadProductImage(file: File | Blob, customPath?: string): Promise<{ url: string; path: string }>;
+
   // Optional simulation controls for testing
   setSimulatedError?(error: '500' | 'network' | 'none' | null): void;
   setSimulateEmpty?(empty: boolean): void;
@@ -83,32 +98,46 @@ export function getStoreService(): IStoreService {
     return cachedServiceInstance;
   }
 
-  const useMock =
-    process.env.NEXT_PUBLIC_USE_MOCK_API !== 'false' ||
-    !process.env.NEXT_PUBLIC_API_BASE_URL;
+  const forceMock = process.env.NEXT_PUBLIC_USE_MOCK_API === 'true';
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-  if (useMock) {
-    const delay = Number(process.env.NEXT_PUBLIC_MOCK_LATENCY_MS) || 0;
-    const mock = new MockStoreService(delay);
+  const hasValidSupabaseKeys = Boolean(
+    !forceMock &&
+    supabaseUrl &&
+    supabaseAnonKey &&
+    supabaseUrl.startsWith('http') &&
+    supabaseAnonKey.length > 20
+  );
 
-    if (
-      process.env.NEXT_PUBLIC_SIMULATE_API_ERROR === '500' ||
-      process.env.NEXT_PUBLIC_SIMULATE_API_ERROR === 'network'
-    ) {
-      mock.setSimulatedError(
-        process.env.NEXT_PUBLIC_SIMULATE_API_ERROR as '500' | 'network'
-      );
+  if (hasValidSupabaseKeys) {
+    try {
+      cachedServiceInstance = new SupabaseStoreService(supabaseUrl!, supabaseAnonKey!);
+      return cachedServiceInstance;
+    } catch (err) {
+      console.warn('Failed to initialize SupabaseStoreService, falling back to MockStoreService', err);
     }
-    if (process.env.NEXT_PUBLIC_SIMULATE_EMPTY === 'true') {
-      mock.setSimulateEmpty(true);
-    }
-
-    cachedServiceInstance = mock;
-  } else {
-    // Default to MockStoreService if REST is not yet integrated
-    cachedServiceInstance = new MockStoreService(0);
   }
 
+  // Fallback to MockStoreService
+  const delay = Number(process.env.NEXT_PUBLIC_MOCK_LATENCY_MS) || 0;
+  const mock = new MockStoreService(delay);
+
+  if (
+    process.env.NEXT_PUBLIC_SIMULATE_API_ERROR === '500' ||
+    process.env.NEXT_PUBLIC_SIMULATE_API_ERROR === 'network'
+  ) {
+    mock.setSimulatedError(
+      process.env.NEXT_PUBLIC_SIMULATE_API_ERROR as '500' | 'network'
+    );
+  }
+  if (process.env.NEXT_PUBLIC_SIMULATE_EMPTY === 'true') {
+    mock.setSimulateEmpty(true);
+  }
+
+  cachedServiceInstance = mock;
   return cachedServiceInstance;
 }
 
