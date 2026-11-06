@@ -166,6 +166,11 @@ function mapDbCategoryToCategory(row: any): Category {
 }
 
 function mapDbBannerToBanner(row: any): PromotionalBanner {
+  let targetProductSlug: string | undefined = undefined;
+  if (row.target_url && row.target_url.startsWith('/products/')) {
+    targetProductSlug = row.target_url.replace('/products/', '');
+  }
+
   return {
     id: row.id,
     titleAr: row.title_ar,
@@ -178,6 +183,7 @@ function mapDbBannerToBanner(row: any): PromotionalBanner {
     buttonTextEn: row.button_text_en,
     imageUrl: row.image_url,
     targetCategorySlug: row.target_category_slug || undefined,
+    targetProductSlug,
     targetUrl: row.target_url || undefined,
     isActive: Boolean(row.is_active),
     displayOrder: Number(row.display_order) || 0,
@@ -197,7 +203,11 @@ function mapBannerToDbRow(banner: Partial<PromotionalBanner>): any {
   if (banner.buttonTextEn !== undefined) row.button_text_en = banner.buttonTextEn;
   if (banner.imageUrl !== undefined) row.image_url = banner.imageUrl;
   if (banner.targetCategorySlug !== undefined) row.target_category_slug = banner.targetCategorySlug;
-  if (banner.targetUrl !== undefined) row.target_url = banner.targetUrl;
+  if (banner.targetProductSlug) {
+    row.target_url = `/products/${banner.targetProductSlug}`;
+  } else if (banner.targetUrl !== undefined) {
+    row.target_url = banner.targetUrl;
+  }
   if (banner.isActive !== undefined) row.is_active = banner.isActive;
   if (banner.displayOrder !== undefined) row.display_order = banner.displayOrder;
   return row;

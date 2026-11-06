@@ -35,8 +35,8 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ banners }) => {
 
   const getDestinationUrl = () => {
     if (current.targetUrl) return current.targetUrl;
-    if (current.targetProductSlug) return `/product/${current.targetProductSlug}`;
-    if (current.targetProductId) return `/product/${current.targetProductId}`;
+    if (current.targetProductSlug) return `/products/${current.targetProductSlug}`;
+    if (current.targetProductId) return `/products/${current.targetProductId}`;
     if (current.targetCategorySlug) return `/catalog?category=${current.targetCategorySlug}`;
     return '/catalog';
   };
