@@ -93,3 +93,23 @@ export function buildWhatsAppOrderUrl(
 export function formatSocialOrderSummary(order: Order): string {
   return formatOrderReceiptMessage(order);
 }
+
+/**
+ * Builds direct WhatsApp Click-to-Chat URL for Admin-to-Customer communication regarding an existing order.
+ * Normalizes customer Egyptian phone (01... -> 201...) and constructs a tailored greeting message.
+ */
+export function buildAdminCustomerWhatsAppUrl(order: Order): string {
+  const customerPhone = order.customer.phone;
+  const itemsCount = order.items.reduce((sum, item) => sum + item.quantity, 0);
+
+  const message =
+    `مرحباً ${order.customer.fullName} 👋🌸\n` +
+    `معاكِ خدمة عملاء متجر روبي ستور (ROBY STORE).\n` +
+    `بخصوص طلبك المسجل لدينا برقم: #${order.orderId}\n` +
+    `عدد المنتجات: (${itemsCount} قطع) بإجمالي: ${order.pricing.grandTotal} ج.م\n` +
+    `العنوان: ${order.customer.governorate} - ${order.customer.city}\n\n` +
+    `نود التأكيد معكِ بشأن تفاصيل وموعد شحن الطلب...`;
+
+  return buildWhatsAppOrderUrl(customerPhone, message);
+}
+

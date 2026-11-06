@@ -1,0 +1,339 @@
+[
+  {
+    "orderId": "ROBY-20261101-1024",
+    "createdAt": "2026-11-01T10:15:00Z",
+    "customer": {
+      "fullName": "سارة إبراهيم الشناوي",
+      "phone": "01012345678",
+      "alternativePhone": "01198765432",
+      "governorate": "Cairo",
+      "city": "مدينة نصر",
+      "deliveryAddress": "شارع مكرم عبيد، عمارة 45، الدور الخامس، شقة 18",
+      "notes": "يرجى الاتصال قبل الوصول بنصف ساعة"
+    },
+    "items": [
+      {
+        "productId": "prod_abaya_royal_crepe",
+        "productSlug": "royal-embroidered-crepe-abaya",
+        "productTitleAr": "عباية كريب رويال مطرزة يدوياً",
+        "productTitleEn": "Royal Hand-Embroidered Crepe Abaya",
+        "productImage": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
+        "sku": "ROBY-ABY-01-BLK-M",
+        "colorNameAr": "أسود ملكي",
+        "colorNameEn": "Royal Black",
+        "colorHex": "#111111",
+        "size": "M",
+        "unitPrice": 950,
+        "originalUnitPrice": 1250,
+        "quantity": 1,
+        "subtotal": 950
+      }
+    ],
+    "pricing": {
+      "subtotal": 950,
+      "shippingFee": 50,
+      "totalSavings": 300,
+      "grandTotal": 1000,
+      "currency": "EGP"
+    },
+    "status": "pending_dispatch",
+    "dispatchChannel": "whatsapp",
+    "formattedSocialMessage": "طلب جديد من متجر روبي - Roby Store\n#ROBY-20261101-1024",
+    "whatsappDirectUrl": "https://wa.me/201001234567?text=ROBY-20261101-1024"
+  },
+  {
+    "orderId": "ROBY-20261102-3819",
+    "createdAt": "2026-11-02T14:30:00Z",
+    "customer": {
+      "fullName": "نورهان طارق المهندس",
+      "phone": "01123456789",
+      "governorate": "Giza",
+      "city": "الدقي",
+      "deliveryAddress": "شارع مصدق، برج الأطباء، الدور التاسع، شقة 3",
+      "notes": "التسليم متاح بعد الساعة 3 عصراً"
+    },
+    "items": [
+      {
+        "productId": "prod_01",
+        "productSlug": "luxury-silk-abaya",
+        "productTitleAr": "عباية حرير فاخرة",
+        "productTitleEn": "Luxury Silk Abaya",
+        "productImage": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
+        "sku": "ROBY-ABY-ROS-L",
+        "colorNameAr": "وردي مغبر",
+        "colorNameEn": "Dusty Rose",
+        "colorHex": "#D4A5A5",
+        "size": "L",
+        "unitPrice": 700,
+        "originalUnitPrice": 850,
+        "quantity": 1,
+        "subtotal": 700
+      },
+      {
+        "productId": "prod_bedsheet_egyptian_cotton",
+        "productSlug": "luxury-egyptian-cotton-bedsheet-set",
+        "productTitleAr": "طقم ملاية قطن مصري 100% تطريز فاخر (5 قطع)",
+        "productTitleEn": "Luxury 100% Egyptian Cotton Bed Sheet Set (5 Pcs)",
+        "productImage": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
+        "sku": "ROBY-SHT-01-WHT-160",
+        "colorNameAr": "أبيض لؤلؤي",
+        "colorNameEn": "Pearl White",
+        "colorHex": "#FDFBF7",
+        "size": "160x200cm (كوين)",
+        "unitPrice": 770,
+        "originalUnitPrice": 930,
+        "quantity": 1,
+        "subtotal": 770
+      }
+    ],
+    "pricing": {
+      "subtotal": 1470,
+      "shippingFee": 50,
+      "totalSavings": 310,
+      "grandTotal": 1520,
+      "currency": "EGP"
+    },
+    "status": "dispatched_whatsapp",
+    "dispatchChannel": "whatsapp",
+    "formattedSocialMessage": "طلب جديد من متجر روبي - Roby Store\n#ROBY-20261102-3819",
+    "whatsappDirectUrl": "https://wa.me/201001234567?text=ROBY-20261102-3819"
+  },
+  {
+    "orderId": "ROBY-20261103-5712",
+    "createdAt": "2026-11-03T11:00:00Z",
+    "customer": {
+      "fullName": "ياسمين خالد عبد الرحمن",
+      "phone": "01234567890",
+      "governorate": "Alexandria",
+      "city": "سموحة",
+      "deliveryAddress": "شارع فيكتور عمانويل، عمارة الأندلس، الدور الثالث",
+      "notes": "الدفع عند الاستلام مع المعاينة"
+    },
+    "items": [
+      {
+        "productId": "prod_dress_floral_chiffon",
+        "productSlug": "modest-floral-chiffon-dress",
+        "productTitleAr": "فستان شيفون طويل مشجر بأكمام واسعة",
+        "productTitleEn": "Modest Long Floral Chiffon Dress",
+        "productImage": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80",
+        "sku": "ROBY-DRS-01-BLU-L",
+        "colorNameAr": "أزرق سماوي",
+        "colorNameEn": "Sky Blue",
+        "colorHex": "#7BA7BC",
+        "size": "L",
+        "unitPrice": 750,
+        "originalUnitPrice": 980,
+        "quantity": 2,
+        "subtotal": 1500
+      }
+    ],
+    "pricing": {
+      "subtotal": 1500,
+      "shippingFee": 65,
+      "totalSavings": 460,
+      "grandTotal": 1565,
+      "currency": "EGP"
+    },
+    "status": "confirmed",
+    "dispatchChannel": "whatsapp",
+    "formattedSocialMessage": "طلب جديد من متجر روبي - Roby Store\n#ROBY-20261103-5712",
+    "whatsappDirectUrl": "https://wa.me/201001234567?text=ROBY-20261103-5712"
+  },
+  {
+    "orderId": "ROBY-20261104-4901",
+    "createdAt": "2026-11-04T16:20:00Z",
+    "customer": {
+      "fullName": "مريم حسام البدري",
+      "phone": "01512345678",
+      "governorate": "Dakahlia",
+      "city": "المنصورة",
+      "deliveryAddress": "شارع الجمهورية، بجوار جامعة المنصورة، برج الصفا",
+      "notes": ""
+    },
+    "items": [
+      {
+        "productId": "prod_bedsheet_egyptian_cotton",
+        "productSlug": "luxury-egyptian-cotton-bedsheet-set",
+        "productTitleAr": "طقم ملاية قطن مصري 100% تطريز فاخر (5 قطع)",
+        "productTitleEn": "Luxury 100% Egyptian Cotton Bed Sheet Set (5 Pcs)",
+        "productImage": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
+        "sku": "ROBY-SHT-01-ROS-160",
+        "colorNameAr": "وردي كشمير",
+        "colorNameEn": "Cashmere Rose",
+        "colorHex": "#DCAE96",
+        "size": "160x200cm (كوين)",
+        "unitPrice": 770,
+        "originalUnitPrice": 930,
+        "quantity": 1,
+        "subtotal": 770
+      }
+    ],
+    "pricing": {
+      "subtotal": 770,
+      "shippingFee": 65,
+      "totalSavings": 160,
+      "grandTotal": 835,
+      "currency": "EGP"
+    },
+    "status": "shipped",
+    "dispatchChannel": "whatsapp",
+    "formattedSocialMessage": "طلب جديد من متجر روبي - Roby Store\n#ROBY-20261104-4901",
+    "whatsappDirectUrl": "https://wa.me/201001234567?text=ROBY-20261104-4901"
+  },
+  {
+    "orderId": "ROBY-20261105-8820",
+    "createdAt": "2026-11-05T09:45:00Z",
+    "customer": {
+      "fullName": "هبة أشرف القاضي",
+      "phone": "01098765432",
+      "governorate": "Cairo",
+      "city": "التجمع الخامس",
+      "deliveryAddress": "حي النرجس، فيلا 112، بجوار مسجد المصطفى",
+      "notes": "الاستلام مع حارس العقار"
+    },
+    "items": [
+      {
+        "productId": "prod_abaya_royal_crepe",
+        "productSlug": "royal-embroidered-crepe-abaya",
+        "productTitleAr": "عباية كريب رويال مطرزة يدوياً",
+        "productTitleEn": "Royal Hand-Embroidered Crepe Abaya",
+        "productImage": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
+        "sku": "ROBY-ABY-01-EMR-M",
+        "colorNameAr": "أخضر زمردي",
+        "colorNameEn": "Emerald Green",
+        "colorHex": "#046307",
+        "size": "M",
+        "unitPrice": 950,
+        "originalUnitPrice": 1250,
+        "quantity": 1,
+        "subtotal": 950
+      },
+      {
+        "productId": "prod_01",
+        "productSlug": "luxury-silk-abaya",
+        "productTitleAr": "عباية حرير فاخرة",
+        "productTitleEn": "Luxury Silk Abaya",
+        "productImage": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
+        "sku": "ROBY-ABY-BLK-M",
+        "colorNameAr": "أسود ملكي",
+        "colorNameEn": "Royal Black",
+        "colorHex": "#1A1A1A",
+        "size": "M",
+        "unitPrice": 700,
+        "originalUnitPrice": 850,
+        "quantity": 1,
+        "subtotal": 700
+      }
+    ],
+    "pricing": {
+      "subtotal": 1650,
+      "shippingFee": 50,
+      "totalSavings": 450,
+      "grandTotal": 1700,
+      "currency": "EGP"
+    },
+    "status": "delivered",
+    "dispatchChannel": "web",
+    "formattedSocialMessage": "طلب جديد من متجر روبي - Roby Store\n#ROBY-20261105-8820",
+    "whatsappDirectUrl": "https://wa.me/201001234567?text=ROBY-20261105-8820"
+  },
+  {
+    "orderId": "ROBY-20261105-9142",
+    "createdAt": "2026-11-05T18:10:00Z",
+    "customer": {
+      "fullName": "رانيا سامي فهمي",
+      "phone": "01187654321",
+      "governorate": "Giza",
+      "city": "الشيخ زايد",
+      "deliveryAddress": "كمبوند بيفرلي هيلز، المرحلة الثانية، فيلا 42",
+      "notes": "تم إلغاء الطلب بناء على رغبة العميل لطلب مقاس مختلف"
+    },
+    "items": [
+      {
+        "productId": "prod_abaya_royal_crepe",
+        "productSlug": "royal-embroidered-crepe-abaya",
+        "productTitleAr": "عباية كريب رويال مطرزة يدوياً",
+        "productTitleEn": "Royal Hand-Embroidered Crepe Abaya",
+        "productImage": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
+        "sku": "ROBY-ABY-01-BLK-XL",
+        "colorNameAr": "أسود ملكي",
+        "colorNameEn": "Royal Black",
+        "colorHex": "#111111",
+        "size": "XL",
+        "unitPrice": 1000,
+        "originalUnitPrice": 1300,
+        "quantity": 1,
+        "subtotal": 1000
+      }
+    ],
+    "pricing": {
+      "subtotal": 1000,
+      "shippingFee": 50,
+      "totalSavings": 300,
+      "grandTotal": 1050,
+      "currency": "EGP"
+    },
+    "status": "cancelled",
+    "dispatchChannel": "whatsapp",
+    "formattedSocialMessage": "طلب جديد من متجر روبي - Roby Store\n#ROBY-20261105-9142",
+    "whatsappDirectUrl": "https://wa.me/201001234567?text=ROBY-20261105-9142"
+  },
+  {
+    "orderId": "ROBY-20261106-2041",
+    "createdAt": "2026-11-06T08:25:00Z",
+    "customer": {
+      "fullName": "ندى مصطفى سالم",
+      "phone": "01287654321",
+      "alternativePhone": "01023456789",
+      "governorate": "Alexandria",
+      "city": "لوران",
+      "deliveryAddress": "شارع الإقبال، برج الفيروز، الدور السابع، شقة 702",
+      "notes": "مطلوب تغليف هدية راقي مع كرت إهداء"
+    },
+    "items": [
+      {
+        "productId": "prod_bedsheet_egyptian_cotton",
+        "productSlug": "luxury-egyptian-cotton-bedsheet-set",
+        "productTitleAr": "طقم ملاية قطن مصري 100% تطريز فاخر (5 قطع)",
+        "productTitleEn": "Luxury 100% Egyptian Cotton Bed Sheet Set (5 Pcs)",
+        "productImage": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
+        "sku": "ROBY-SHT-01-WHT-180",
+        "colorNameAr": "أبيض لؤلؤي",
+        "colorNameEn": "Pearl White",
+        "colorHex": "#FDFBF7",
+        "size": "180x200cm (كينج)",
+        "unitPrice": 840,
+        "originalUnitPrice": 1000,
+        "quantity": 1,
+        "subtotal": 840
+      },
+      {
+        "productId": "prod_abaya_royal_crepe",
+        "productSlug": "royal-embroidered-crepe-abaya",
+        "productTitleAr": "عباية كريب رويال مطرزة يدوياً",
+        "productTitleEn": "Royal Hand-Embroidered Crepe Abaya",
+        "productImage": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80",
+        "sku": "ROBY-ABY-01-NVY-L",
+        "colorNameAr": "كحلي داكن",
+        "colorNameEn": "Deep Navy",
+        "colorHex": "#0F1E36",
+        "size": "L",
+        "unitPrice": 950,
+        "originalUnitPrice": 1250,
+        "quantity": 1,
+        "subtotal": 950
+      }
+    ],
+    "pricing": {
+      "subtotal": 1790,
+      "shippingFee": 65,
+      "totalSavings": 460,
+      "grandTotal": 1855,
+      "currency": "EGP"
+    },
+    "status": "confirmed",
+    "dispatchChannel": "whatsapp",
+    "formattedSocialMessage": "طلب جديد من متجر روبي - Roby Store\n#ROBY-20261106-2041",
+    "whatsappDirectUrl": "https://wa.me/201001234567?text=ROBY-20261106-2041"
+  }
+]

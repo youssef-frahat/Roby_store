@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   LayoutDashboard,
+  ShoppingBag,
   Package,
   Settings,
   ExternalLink,
@@ -25,8 +26,8 @@ export default function AdminLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  // Suppress admin shell on login page
-  if (pathname === '/admin/login') {
+  // Suppress admin shell on login page or receipt printout
+  if (pathname === '/admin/login' || pathname.includes('/receipt')) {
     return <>{children}</>;
   }
 
@@ -51,6 +52,12 @@ export default function AdminLayout({
       active: pathname === '/admin',
     },
     {
+      title: 'إدارة الطلبات',
+      href: '/admin/orders',
+      icon: ShoppingBag,
+      active: pathname.startsWith('/admin/orders'),
+    },
+    {
       title: 'إدارة المنتجات',
       href: '/admin/products',
       icon: Package,
@@ -67,7 +74,7 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-rose-50/20 flex flex-col md:flex-row text-charcoal-900" dir="rtl">
       {/* Desktop Sidebar (RTL: right side) */}
-      <aside className="hidden md:flex flex-col w-64 bg-white border-l border-rose-100 min-h-screen shrink-0 sticky top-0 h-screen overflow-y-auto">
+      <aside className="hidden md:flex flex-col w-64 bg-white border-l border-rose-100 min-h-screen shrink-0 sticky top-0 h-screen overflow-y-auto print:hidden">
         {/* Egyptian Luxury Admin Branding */}
         <div className="p-6 border-b border-rose-100 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full border-2 border-[#D4AF37] bg-[#800020] flex items-center justify-center text-white font-serif font-black text-lg shadow-sm">
@@ -228,7 +235,7 @@ export default function AdminLayout({
       {/* Main Content Area with Top Bar */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Bar */}
-        <header className="h-16 bg-white border-b border-rose-100 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30 shadow-xs">
+        <header className="h-16 bg-white border-b border-rose-100 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30 shadow-xs print:hidden">
           {/* Mobile Hamburger Button */}
           <div className="flex items-center gap-3">
             <button

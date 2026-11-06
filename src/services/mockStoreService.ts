@@ -38,6 +38,7 @@ import productsData from '../data/products.json';
 import bannersData from '../data/banners.json';
 import governoratesData from '../data/governorates.json';
 import settingsData from '../data/settings.json';
+import ordersData from '../data/orders.json';
 
 export class MockStoreService implements IStoreService {
   private delayMs: number;
@@ -59,7 +60,7 @@ export class MockStoreService implements IStoreService {
     this.banners = JSON.parse(JSON.stringify(bannersData)) as PromotionalBanner[];
     this.governorates = JSON.parse(JSON.stringify(governoratesData)) as GovernorateInfo[];
     this.settings = JSON.parse(JSON.stringify(settingsData)) as StoreSettings;
-    this.orders = [];
+    this.orders = JSON.parse(JSON.stringify(ordersData)) as Order[];
 
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
